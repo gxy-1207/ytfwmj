@@ -8,23 +8,23 @@
     </item>
 
     <item
-        android:width="350dp"
-        android:height="300dp"
-        android:bottom="252dp"
-        android:end="12dp"
-        android:gravity="center_horizontal|top"
-        android:start="12dp"
-        android:top="113dp">
-        <bitmap android:src="@mipmap/bg_splash_top" />
+        android:width="212dp"
+        android:height="290dp"
+        android:bottom="300dp"
+        android:end="101dp"
+        android:gravity="center_horizontal|center"
+        android:start="101dp"
+        android:top="200dp">
+        <bitmap android:src="@mipmap/mj_splash_logo" />
     </item>
 
 
     <item
-        android:width="173dp"
-        android:height="70dp"
-        android:bottom="64dp"
+        android:width="200dp"
+        android:height="73dp"
+        android:bottom="200dp"
         android:gravity="center_horizontal|bottom">
-        <bitmap android:src="@mipmap/bg_splash_bottom" />
+        <bitmap android:src="@mipmap/mj_splash_wenzi" />
     </item>
 
 </layer-list>

@@ -81,7 +81,7 @@ public class UserPersonalFragment extends BaseFragment<UserPersonalView, UserPer
         if (!hidden) {
             FragmentActivity activity = getActivity();
             if (null != activity) {
-                StatusBarCompat.setStatusBarColor(activity, Color.parseColor("#44A2F7"));
+                StatusBarCompat.setStatusBarColor(activity, Color.parseColor("#F8203A"));
             }
         }
     }

@@ -2,6 +2,7 @@ package com.ytfu.lawyercircle.ui.lawyer.wallet.act;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.ytfu.lawyercircle.utils.SpUtil;
 import com.ytfu.lawyercircle.utils.ToastUtil;
 
 import butterknife.BindView;
+import qiu.niorgai.StatusBarCompat;
 
 /** 我的钱包界面 */
 public class WalletActivity extends BaseActivity<WalletView, WalletPresenter>
@@ -96,7 +98,7 @@ public class WalletActivity extends BaseActivity<WalletView, WalletPresenter>
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, Color.parseColor("#F8203A"));
     }
 
     @Override

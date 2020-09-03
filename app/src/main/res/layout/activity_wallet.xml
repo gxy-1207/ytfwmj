@@ -17,7 +17,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="202dp"
-            android:background="@mipmap/bg_wallet_top">
+            android:background="@mipmap/mj_bg_wallet_top">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -138,7 +138,7 @@
                 android:paddingTop="13dp"
                 android:paddingBottom="13dp"
                 android:text="@string/txt_top_up"
-                android:textColor="#FF44A2F7"
+                android:textColor="#F8203A"
                 android:textSize="14sp" />
 
             <TextView

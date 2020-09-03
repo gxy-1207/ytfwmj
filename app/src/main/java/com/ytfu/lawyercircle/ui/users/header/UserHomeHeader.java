@@ -37,7 +37,7 @@ public class UserHomeHeader extends BaseHeaderController<HomeBannerBean> {
 
     @Override
     protected View onCreateHeaderView() {
-        return inflateView(R.layout.user_home_header_view);
+        return inflateView(R.layout.user_mj_home_header_view);
     }
 
     @Override

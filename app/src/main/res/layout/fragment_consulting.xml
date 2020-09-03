@@ -10,7 +10,7 @@
         android:id="@+id/tl_personal_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/transparent_4c"
+        android:background="@color/textColor_F8203A"
         android:minHeight="?android:attr/actionBarSize">
 
         <TextView

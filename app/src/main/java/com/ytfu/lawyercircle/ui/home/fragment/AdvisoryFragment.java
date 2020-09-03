@@ -138,7 +138,7 @@ public class AdvisoryFragment extends BaseFragment<AdvisoryView, AdvisoryPresent
             FragmentActivity activity = getActivity();
             if (null != activity) {
                 StatusBarCompat.setStatusBarColor(
-                        activity, getResources().getColor(R.color.transparent_4c));
+                        activity, getResources().getColor(R.color.textColor_F8203A));
             }
             if (getPresenter() != null) {
                 getPresenter().getRandomLawyers();

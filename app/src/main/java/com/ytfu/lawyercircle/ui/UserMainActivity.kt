@@ -78,11 +78,11 @@ class UserMainActivity : BaseEmptyActivity(), UserHomeView {
                 when (position) {
                     2 -> {
                         @Suppress("DEPRECATION")
-                        setStatusBarColor(resources.getColor(R.color.transparent_4c))
+                        setStatusBarColor(resources.getColor(R.color.textColor_F8203A))
                         changeStatusBarTextColor(false)
                     }
                     4 -> {
-                        setStatusBarColor(Color.parseColor("#44A2F7"))
+                        setStatusBarColor(Color.parseColor("#F8203A"))
                         changeStatusBarTextColor(false)
                     }
                     else -> {
