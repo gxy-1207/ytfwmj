@@ -1,0 +1,241 @@
+package com.ytfu.lawyercircle.ui.home.presenter;
+
+import com.orhanobut.logger.Logger;
+import com.ytfu.lawyercircle.apis.ApiService;
+import com.ytfu.lawyercircle.apis.HttpUtil;
+import com.ytfu.lawyercircle.app.AppConstant;
+import com.ytfu.lawyercircle.base.BasePresenter;
+import com.ytfu.lawyercircle.helper.BaseRxObserver;
+import com.ytfu.lawyercircle.ui.home.bean.AudioShouCangBean;
+import com.ytfu.lawyercircle.ui.lvshihetong.bean.ContractDetailsBean;
+import com.ytfu.lawyercircle.ui.home.view.IContractDetailsView;
+import com.ytfu.lawyercircle.ui.kaitingzhushou.bean.SendEmailBean;
+import com.ytfu.lawyercircle.ui.lvshihetong.bean.DownloadPreviewBean;
+import com.ytfu.lawyercircle.ui.mine.bean.BdEmailBean;
+
+import com.ytfu.lawyercircle.ui.pay.bean.PayBean;
+import com.ytfu.lawyercircle.ui.pay.bean.WxPayBean;
+
+import com.ytfu.lawyercircle.utils.ToastUtil;
+
+import java.util.HashMap;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+/**
+*
+*  @Auther  gxy
+*
+*  @Date    2019/11/13
+*
+*  @Des  合同详情presenter
+*
+*/
+public class ContractDetailsPresenter extends BasePresenter<IContractDetailsView> {
+//    private Context mContext;
+//
+//    public ContractDetailsPresenter(Context mContext) {
+//        this.mContext = mContext;
+//    }
+
+    public void getContractDetails(HashMap<String,String> map){
+        HttpUtil.getInstance().getApiService().contractDetails(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new BaseRxObserver<ContractDetailsBean>() {
+                    @Override
+                    public void onNextImpl(ContractDetailsBean detailsBean) {
+                        if(AppConstant.CODE_SUCCESS == detailsBean.getStatus()){
+                            getView().onContractDetailsSuccess(detailsBean);
+                        }else{
+                            getView().onContractDetailsSuccess(null);
+                        }
+                        getView().hideLoading();
+                    }
+
+                    @Override
+                    public void onErrorImpl(String errorMessage) {
+                        Logger.e("getContractDetails" + errorMessage);
+                        ToastUtil.showToast("网络开小差了");
+                        getView().onContractDetailFiled();
+                        getView().hideLoading();
+                    }
+                });
+    }
+
+    //收藏
+    public void contractShouCang(HashMap<String,String> map){
+        HttpUtil.getInstance().getApiService().getShouCang(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new BaseRxObserver<AudioShouCangBean>() {
+                    @Override
+                    public void onNextImpl(AudioShouCangBean detailsBean) {
+                        if(AppConstant.CODE_SUCCESS == detailsBean.getStatus()){
+                            getView().onShouCangSuccess(detailsBean);
+                        }else{
+                            getView().onContractDetailsSuccess(null);
+                        }
+                    }
+
+                    @Override
+                    public void onErrorImpl(String errorMessage) {
+                        Logger.e("contractShouCang" + errorMessage);
+                        ToastUtil.showToast("网络开小差了");
+                        getView().onContractDetailFiled();
+                        getView().showTimeout();
+                    }
+                });
+    }
+
+    //取消收藏
+    public void contractShouCangDel(HashMap<String,String> map){
+        HttpUtil.getInstance().getApiService().getShouCangdel(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new BaseRxObserver<AudioShouCangBean>() {
+                    @Override
+                    public void onNextImpl(AudioShouCangBean detailsBean) {
+                        if(AppConstant.CODE_SUCCESS == detailsBean.getStatus()){
+                            getView().onShouCangdelSuccess(detailsBean);
+                        }else{
+                            getView().onShouCangdelSuccess(null);
+                        }
+                    }
+
+                    @Override
+                    public void onErrorImpl(String errorMessage) {
+                        Logger.e("contractShouCangDel" + errorMessage);
+                        ToastUtil.showToast("网络开小差了");
+                        getView().onContractDetailFiled();
+                    }
+                });
+    }
+
+    //支付
+    public void setContractPay(HashMap<String,String> map){
+        HttpUtil.getInstance().getApiService().getPay(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new BaseRxObserver<PayBean>() {
+                    @Override
+                    public void onNextImpl(PayBean payBean) {
+                        if(AppConstant.CODE_SUCCESS == payBean.getStatus()){
+                            getView().onContractPaySuccess(payBean);
+                        }else{
+                            getView().onContractPaySuccess(null);
+                        }
+                    }
+
+                    @Override
+                    public void onErrorImpl(String errorMessage) {
+                        Logger.e("setContractPay" + errorMessage);
+                        ToastUtil.showToast("网络开小差了");
+                        getView().onContractDetailFiled();
+                    }
+                });
+    }
+    //微信支付
+    public void setContractPayWx(HashMap<String,String> map){
+        HttpUtil.getInstance().getApiService().getWxPay(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new BaseRxObserver<WxPayBean>() {
+                    @Override
+                    public void onNextImpl(WxPayBean wxPayBean) {
+                        if(AppConstant.CODE_SUCCESS == wxPayBean.getStatus()){
+                            getView().onContractPayWxSuccess(wxPayBean);
+                        }else{
+                            getView().onContractPayWxSuccess(wxPayBean);
+                        }
+                    }
+
+                    @Override
+                    public void onErrorImpl(String errorMessage) {
+                        Logger.e("setContractPayWx" + errorMessage);
+                        ToastUtil.showToast("网络开小差了");
+                        getView().onContractDetailFiled();
+                    }
+                });
+    }
+    //发送邮件
+    public void setSendEmail(HashMap<String,String> map){
+        HttpUtil.getInstance().getApiService().getSendEmails(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new BaseRxObserver<SendEmailBean>() {
+                    @Override
+                    public void onNextImpl(SendEmailBean emailBean) {
+                        if(AppConstant.STATUS_SUCCESS == emailBean.getStatus()){
+                            getView().onSendEmailSuccess(emailBean);
+                        }else{
+                            getView().onSendEmailSuccess(emailBean);
+                        }
+                    }
+
+                    @Override
+                    public void onErrorImpl(String errorMessage) {
+                        Logger.e("setSendEmail :" + errorMessage);
+                        ToastUtil.showToast("网络开小差了");
+                        getView().onContractDetailFiled();
+                    }
+                });
+    }
+
+    //绑定邮箱
+    public void setHtBdEmail(HashMap<String,String> map){
+        HttpUtil.getInstance().getApiService().getBdEmail(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new BaseRxObserver<BdEmailBean>() {
+                    @Override
+                    public void onNextImpl(BdEmailBean entity) {
+                        if (AppConstant.STATUS_SUCCESS == entity.getStatus()) {
+                            getView().onContractBdEmailSuccess(entity);
+                        }else{
+                            getView().onContractBdEmailSuccess(entity);
+                        }
+
+                    }
+                    @Override
+                    public void onErrorImpl(String errorMessage) {
+                        Logger.e("setBdEmail" + errorMessage);
+                        ToastUtil.showToast("网络开小差了");
+//                        getView().showTimeout();
+                        getView().onContractDetailFiled();
+                    }
+                });
+
+    }
+
+    //判断当日下载和预览次数
+    public void getDownloadPreview(String uid,String id,int type){
+        Observable<DownloadPreviewBean> observable = createService(ApiService.class).getDownloadPreview(uid, id, type);
+        requestRemote(observable, new BaseRxObserver<DownloadPreviewBean>() {
+            @Override
+            public void onNextImpl(DownloadPreviewBean data) {
+                if(data == null){
+                    return;
+                }
+                int status = data.getStatus();
+                if(status == 1){
+                    getView().onDownlodaPreviewSuccess(data);
+                }
+            }
+
+            @Override
+            public void onErrorImpl(String errorMessage) {
+                Logger.e("getDownloadPreview" + errorMessage);
+            }
+        });
+    }
+}
