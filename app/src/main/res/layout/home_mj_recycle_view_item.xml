@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="0dp"
+    android:layout_marginBottom="15dp"
+    android:background="#ffffff">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_header"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="15dp"
+            android:src="@mipmap/mj_icon_app_logo" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_header"
+            android:layout_alignLeft="@+id/iv_header"
+            android:layout_alignRight="@+id/iv_header"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="马豹"
+            android:textColor="@color/textColor_37"
+            android:layout_marginBottom="14dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_organization"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_header"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/iv_header"
+            android:text="北京秉理律师事务所"
+            android:textColor="@color/textColor_37"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:id="@+id/ll_lawyer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_organization"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/iv_header"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="优选律师"
+                android:background="@drawable/home_mj_textview_shape1"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColor="#FC753E"
+                android:textSize="10sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/home_mj_textview_shape2"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="王牌律师"
+                android:textColor="#1686FE"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_realm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_lawyer"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginRight="25dp"
+            android:layout_toRightOf="@+id/iv_header"
+            android:text="擅长领域：婚姻家事、单位劳动争议、个人劳动争议、
+交通事故、"
+            android:textSize="11sp"
+            android:textColor="@color/textColor_66"
+            android:layout_marginBottom="15dp"
+            android:lineSpacingExtra="5dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_organization"
+            android:layout_alignBottom="@+id/tv_organization"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@mipmap/mj_icon_year"
+            android:layout_marginRight="15dp"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="5年"
+            android:textColor="@color/textColor_b18647"
+            android:textSize="11sp" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

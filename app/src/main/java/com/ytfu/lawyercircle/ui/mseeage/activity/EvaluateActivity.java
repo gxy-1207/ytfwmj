@@ -10,111 +10,126 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.lee.annotation.InjectLayout;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.base.BaseActivity;
 import com.ytfu.lawyercircle.base.BasePresenter;
 import com.ytfu.lawyercircle.ui.custom.RatingBar;
-import com.ytfu.lawyercircle.utils.CommonUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import qiu.niorgai.StatusBarCompat;
 
-/**
- * @Auther gxy
- * @Date 2020/4/20
- * @Des 发表评价
- */
+/** @Auther gxy @Date 2020/4/20 @Des 发表评价 */
+@InjectLayout(
+        value = R.layout.activity_evaluate,
+        toolbarLayoutId = R.layout.layout_toolbar_center_title)
 public class EvaluateActivity extends BaseActivity {
 
     @BindView(R.id.iv_fanhui)
     ImageView ivFanhui;
+
     @BindView(R.id.tv_top_title)
     TextView tvTopTitle;
+
     @BindView(R.id.tv_pj)
     TextView tvPj;
+
     @BindView(R.id.rb)
     RatingBar rb;
+
     @BindView(R.id.ll_star)
     LinearLayout llStar;
+
     @BindView(R.id.v1)
     View v1;
+
     @BindView(R.id.lly)
     LinearLayout lly;
+
     @BindView(R.id.et_text)
     EditText etText;
+
     @BindView(R.id.tv_tj)
     TextView tvTj;
+
     @BindView(R.id.tv_tijiao)
     TextView tvTijiao;
+
     @BindView(R.id.iv_niming)
     ImageView ivNiming;
+
     boolean isChanged = false;
-    @Override
-    protected int provideContentViewId() {
-        return R.layout.activity_evaluate;
-    }
+    //    @Override
+    //    protected int provideContentViewId() {
+    //        return R.layout.activity_evaluate;
+    //    }
 
     @Override
     protected BasePresenter createPresenter() {
         return null;
     }
+
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        //        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
     }
+
     @Override
     protected void initView() {
         hideLoading();
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.textColor_F8203A));
+        changeStatusBarTextColor(false);
+        setToolbarBackgroud(getResources().getColor(R.color.textColor_F8203A));
+        setToolbarLeftImage(R.drawable.fanhui_bai, view -> onBackPressed());
+        setToolbarText(R.id.tv_global_title, "发表评价");
         tvTopTitle.setText("发表评价");
     }
 
     @Override
     protected void initData() {
-        rb.setClickable(true);//设置可否点击
-        rb.setStar(5f);//设置显示的星星个数
-        rb.setStepSize(RatingBar.StepSize.Full);//设置每次点击增加一颗星还是半颗星
-        etText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        rb.setClickable(true); // 设置可否点击
+        rb.setStar(5f); // 设置显示的星星个数
+        rb.setStepSize(RatingBar.StepSize.Full); // 设置每次点击增加一颗星还是半颗星
+        etText.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s, int start, int count, int after) {}
 
-            }
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        Editable text = etText.getText();
+                        int length = text.length();
+                        tvTj.setText(length + "" + "/200字");
+                        if (length > 200) {
+                            ToastUtil.showCenterToast("超出字数限制");
+                            int selEndIndex = Selection.getSelectionEnd(text);
+                            String str = text.toString();
+                            // 截取新字符串
+                            String newStr = str.substring(0, 200);
+                            etText.setText(newStr);
+                            text = etText.getText();
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                Editable text = etText.getText();
-                int length = text.length();
-                tvTj.setText(length + "" + "/200字");
-                if (length > 200) {
-                    ToastUtil.showCenterToast("超出字数限制");
-                    int selEndIndex = Selection.getSelectionEnd(text);
-                    String str = text.toString();
-                    //截取新字符串
-                    String newStr = str.substring(0, 200);
-                    etText.setText(newStr);
-                    text = etText.getText();
-
-                    //新字符串的长度
-                    int newLen = text.length();
-                    //旧光标位置超过字符串长度
-                    if (selEndIndex > newLen) {
-                        selEndIndex = text.length();
+                            // 新字符串的长度
+                            int newLen = text.length();
+                            // 旧光标位置超过字符串长度
+                            if (selEndIndex > newLen) {
+                                selEndIndex = text.length();
+                            }
+                            // 设置新光标所在的位置
+                            Selection.setSelection(text, selEndIndex);
+                        }
                     }
-                    //设置新光标所在的位置
-                    Selection.setSelection(text, selEndIndex);
-                }
-            }
-        });
+                });
     }
 
-    @OnClick({R.id.iv_fanhui, R.id.tv_tijiao,R.id.iv_niming})
+    @OnClick({R.id.iv_fanhui, R.id.tv_tijiao, R.id.iv_niming})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_fanhui:
@@ -125,18 +140,17 @@ public class EvaluateActivity extends BaseActivity {
                     ToastUtil.showCenterToast("输入为空");
                 } else {
                     ToastUtil.showCenterToast("提交评论成功");
+                    finish();
                 }
                 break;
             case R.id.iv_niming:
-                if(isChanged){
+                if (isChanged) {
                     ivNiming.setImageDrawable(getResources().getDrawable(R.drawable.weixuanzhong));
-                }else
-                {
+                } else {
                     ivNiming.setImageDrawable(getResources().getDrawable(R.drawable.xuanzhong));
                 }
                 isChanged = !isChanged;
                 break;
         }
     }
-
 }

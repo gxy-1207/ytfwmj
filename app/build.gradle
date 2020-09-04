@@ -5,8 +5,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 ext {
     URL_CONFIG = [
-            DEBUG_API_URL  : '"http://ceshi.yuntaifawu.com/"',
-            RELEASE_API_URL: '"https://yuntaifawu.com/"'
+            //http://majia.yuntaifawu.com/
+            DEBUG_API_URL  : '"http://majia.yuntaifawu.com/"',
+            RELEASE_API_URL: '"http://majia.yuntaifawu.com/"'
     ]
 
     RSA_PUBLIC_KEY = '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhHzdLKtwxUapTJOcCV4PwAtsC9A3ruL0OJMfIxxXsQpm1qH00J690LSCsrpbEVCvDz07tvU3zMUwB8L8eBi6pQpPHMBKNSR7H15cWWj5oT+fcLQMS5Nqw5vlwF0acqUoGLfap1MGl4TD9hV/PDlgtQt27njkvcm84+7iHDHZTqtSgHKFKDQBHpJRKh8HP1V9FbR6drmcv2zxsOKh8WzGFyiJPNG5R6+llojR925eqIcf9yn6gYqomYGTOdRM9jOKyPBfgk+8AJtzYe7seGbMbIFaRN9LispQUsBtIkmLplpchIHkxFjhErX8BIKaS9xseZJAvaH1NLIoEKTdKJk0iQIDAQAB"'

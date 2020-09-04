@@ -12,6 +12,8 @@ import com.ytfu.lawyercircle.ui.UserMainActivity;
 import com.ytfu.lawyercircle.ui.users.fragment.MineConsultationFragment;
 import com.ytfu.lawyercircle.utils.SpUtil;
 
+import qiu.niorgai.StatusBarCompat;
+
 /** @Auther gxy @Date 2020/6/12 @Des 我的咨询 */
 @InjectLayout(
         value = R.layout.activity_mine_consultation_list,
@@ -44,14 +46,16 @@ public class MineConsultationListActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-
         hideLoading();
-        changeStatusBarTextColor(false);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
+        setToolbarBackgroud(getResources().getColor(R.color.white));
         setToolbarLeftImage(
-                R.drawable.fanhui_bai,
+                R.drawable.fanhui_hui,
                 v -> {
                     onBackPressed();
                 });
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         String identityType = SpUtil.getString(mContext, AppConstant.SHENFEN, "1");
         if (identityType.equals("1")) {
             setToolbarText(R.id.tv_global_title, "我的咨询");

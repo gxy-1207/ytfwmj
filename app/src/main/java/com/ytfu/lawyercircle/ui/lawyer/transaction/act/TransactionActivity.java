@@ -10,6 +10,8 @@ import com.ytfu.lawyercircle.base.BasePresenter;
 import com.ytfu.lawyercircle.base.BaseView;
 import com.ytfu.lawyercircle.ui.lawyer.transaction.frament.TransactionFragment;
 
+import qiu.niorgai.StatusBarCompat;
+
 /** 律师零钱明细 */
 @InjectLayout(
         value = R.layout.activity_transaction,
@@ -24,9 +26,12 @@ public class TransactionActivity extends BaseActivity<BaseView, BasePresenter<Ba
     protected void initData() {
         super.initData();
         hideLoading();
-        changeStatusBarTextColor(false);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
         setToolbarLeftImage(R.drawable.fanhui_bai, v -> onBackPressed());
         setToolbarText(R.id.tv_global_title, "零钱明细");
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
+        setToolbarBackgroud(getResources().getColor(R.color.white));
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fl_transaction_content, TransactionFragment.newInstance())

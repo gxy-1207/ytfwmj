@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/incld_title_center" />
+    <include
+        layout="@layout/incld_title_center"
+        android:visibility="gone" />
 
     <com.ytfu.lawyercircle.ui.custom.MyRadioGroup
         android:id="@+id/flowlayout"
@@ -17,25 +19,26 @@
         android:layout_height="7.5dp"
         android:layout_marginTop="20dp"
         android:background="#E9E9E9" />
+
     <LinearLayout
         android:id="@+id/ll_empey"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_empty"
-            />
+            android:src="@mipmap/icon_empty" />
     </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rl_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:overScrollMode="never"
-            android:scrollbars="none" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
 </LinearLayout>

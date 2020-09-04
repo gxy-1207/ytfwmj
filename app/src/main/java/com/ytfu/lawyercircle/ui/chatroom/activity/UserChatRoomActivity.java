@@ -5,7 +5,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -66,7 +65,6 @@ import com.ytfu.lawyercircle.ui.redpackage.act.SendRedPackageActivity;
 import com.ytfu.lawyercircle.ui.redpackage.act.UserRedPackageActivity;
 import com.ytfu.lawyercircle.ui.users.bean.RefundButtonVisibleBean;
 import com.ytfu.lawyercircle.utils.DialorUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.LoginHelper;
 import com.ytfu.lawyercircle.utils.MessageEvent;
 import com.ytfu.lawyercircle.utils.SpUtil;
@@ -201,13 +199,13 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
         if (null != conversation) {
             conversation.markAllMessagesAsRead();
         }
-        Eyes.setStatusBarColor(this, Color.parseColor("#44A2F7"));
+        //        Eyes.setStatusBarColor(this, Color.parseColor("#44A2F7"));
         // ===Desc:Toolbar=================================================================
         // 初始化Toolbar
         srv_room_refresh.setEnabled(false);
-
+        setToolbarBackgroud(getResources().getColor(R.color.white));
         setToolbarLeftImage(
-                R.drawable.fanhui_bai,
+                R.drawable.fanhui_hui,
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -216,7 +214,7 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
                 });
         String toUserName = getBundleString(KEY_TO_USER_NAME, "");
         setToolbarText(R.id.tv_global_title, toUserName);
-
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         // ===Desc:=================================================================
         String toUserAvatar = getBundleString(KEY_TO_USER_AVATAR, "");
         ConversationBean.MsgBean msgBean =
@@ -495,8 +493,8 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
 
     @Override
     protected void initData() {
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.transparent_4c));
-
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
         boolean isCustomer = getBundleBoolean(KEY_IS_CUSTOMER_SERVICE, false);
         String toUserId = getBundleString(KEY_TO_USER_ID, "");
         String selfId = SpUtil.getString(mContext, AppConstant.UID, "");

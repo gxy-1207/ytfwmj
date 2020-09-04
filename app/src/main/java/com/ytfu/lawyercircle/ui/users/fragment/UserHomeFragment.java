@@ -102,8 +102,8 @@ public class UserHomeFragment
         super.initView(rootView);
         hideLoading();
         setHasOptionsMenu(true);
-        setToolbarText(R.id.tv_global_title, "云台法律咨询");
-        setToolbarTextColor(R.id.tv_global_title, Color.parseColor("#222222"));
+        setToolbarText(R.id.tv_global_title, "律师圈");
+        setToolbarTextColor(R.id.tv_global_title, Color.parseColor("#333333"));
         mToolbar.setBackgroundColor(CommonUtil.getColor(R.color.transparent_half));
         mToolbar.inflateMenu(R.menu.user_home_menu);
         mToolbar.setOnMenuItemClickListener(
@@ -116,6 +116,7 @@ public class UserHomeFragment
                     return false;
                 });
         linearLayout.setBackgroundResource(R.color.textcolor_f2);
+        getRecycleView().setBackgroundResource(R.color.textcolor_f2);
         getAdapter()
                 .setOnItemClickListener(
                         (adapter, view, position) -> {

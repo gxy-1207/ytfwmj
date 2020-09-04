@@ -110,7 +110,8 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
     @Override
     protected void initData() {
         super.initData();
-        StatusBarCompat.setStatusBarColor(this, Color.parseColor("#43A1F7"));
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.textColor_F8203A));
+       setToolbarBackgroud(getResources().getColor(R.color.textColor_F8203A));
         //获取服务器推荐的关键词
         getPresenter().getRecommendWords();
         //加载本地搜索历史记录
@@ -129,7 +130,8 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
             @Override
             public View getView(FlowLayout parent, int position, RecommendWordBean.DataBean s) {
                 TextView tv = new TextView(mContext);
-                tv.setTextColor(Color.parseColor("#43A1F7"));
+//                tv.setTextColor(Color.parseColor("#43A1F7"));
+                tv.setTextColor(getResources().getColor(R.color.textColor_F8203A));
                 tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                 int paddingTop = XPopupUtils.dp2px(mContext, 8F);
                 int paddingLeft = XPopupUtils.dp2px(mContext, 14F);
@@ -155,7 +157,8 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
                 super.unSelected(position, view);
                 if (view instanceof TextView) {
                     TextView tv = (TextView) view;
-                    tv.setTextColor(Color.parseColor("#43A1F7"));
+//                    tv.setTextColor(Color.parseColor("#43A1F7"));
+                    tv.setTextColor(getResources().getColor(R.color.textColor_F8203A));
                 }
             }
         });

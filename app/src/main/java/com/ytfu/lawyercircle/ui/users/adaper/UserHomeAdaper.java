@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class UserHomeAdaper extends QuickAdapter<LawyerHomeListBean.DataBean> {
     public UserHomeAdaper() {
-        super(R.layout.home_recycle_view_item);
+        super(R.layout.home_mj_recycle_view_item);
     }
 
     @Override

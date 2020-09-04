@@ -24,6 +24,7 @@ import com.ytfu.lawyercircle.utils.SpUtil;
 import com.ytfu.lawyercircle.utils.ToastUtil;
 
 import butterknife.BindView;
+import qiu.niorgai.StatusBarCompat;
 
 /** 绑定支付宝界面 */
 public class BindAliActivity extends BaseActivity<BindAliView, BindAliPresenter>
@@ -73,6 +74,7 @@ public class BindAliActivity extends BaseActivity<BindAliView, BindAliPresenter>
 
     @Override
     protected void initView() {
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.textColor_F8203A));
         et_bind_name.addTextChangedListener(
                 new TextWatcher() {
                     @Override

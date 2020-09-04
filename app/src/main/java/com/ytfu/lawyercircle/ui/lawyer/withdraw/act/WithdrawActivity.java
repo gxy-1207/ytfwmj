@@ -28,6 +28,7 @@ import com.ytfu.lawyercircle.utils.SpUtil;
 import com.ytfu.lawyercircle.utils.ToastUtil;
 
 import butterknife.BindView;
+import qiu.niorgai.StatusBarCompat;
 
 public class WithdrawActivity extends BaseActivity<WithdrawView, WithdrawPresenter>
         implements WithdrawView {
@@ -91,6 +92,7 @@ public class WithdrawActivity extends BaseActivity<WithdrawView, WithdrawPresent
 
     @Override
     protected void initData() {
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.textColor_F8203A));
         tv_withdraw_title.setText(R.string.txt_withdraw);
         tl_withdraw_toolbar.setTitle("");
         setSupportActionBar(tl_withdraw_toolbar);

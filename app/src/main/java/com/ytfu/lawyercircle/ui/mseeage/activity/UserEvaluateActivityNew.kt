@@ -34,8 +34,9 @@ class UserEvaluateActivityNew : BaseEmptyActivity() {
     override fun onSetViewData() {
         super.onSetViewData()
         @Suppress("DEPRECATION")
-        StatusBarCompat.setStatusBarColor(this, resources.getColor(R.color.transparent_4c))
+        StatusBarCompat.setStatusBarColor(this, resources.getColor(R.color.textColor_F8203A))
         changeStatusBarTextColor(false)
+        setToolbarBackgroundColor(resources.getColor(R.color.textColor_F8203A))
         setToolbarLeftImage(R.drawable.fanhui_bai) { onBackPressed() }
         val title = getBundleValue(KEY_TITLE, "")
         setToolbarText(R.id.tv_global_title, title)

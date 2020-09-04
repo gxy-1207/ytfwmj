@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.lee.annotation.InjectLayout;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.AppConstant;
 import com.ytfu.lawyercircle.base.BaseActivity;
@@ -29,8 +30,6 @@ import com.ytfu.lawyercircle.ui.mseeage.bean.LvShiDetailsBean1;
 import com.ytfu.lawyercircle.ui.mseeage.presenter.LvShiDetailsPresent;
 import com.ytfu.lawyercircle.ui.mseeage.view.ILvShiDetailsView;
 import com.ytfu.lawyercircle.ui.qisuzhuang.activity.ActivityQiSuZhuang;
-import com.ytfu.lawyercircle.utils.CommonUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.GlideManager;
 import com.ytfu.lawyercircle.utils.SpUtil;
 
@@ -38,8 +37,12 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import qiu.niorgai.StatusBarCompat;
 
 /** @Auther gxy @Date 2020/4/15 @Des 律师详情 */
+@InjectLayout(
+        value = R.layout.activity_lvshidetails,
+        toolbarLayoutId = R.layout.layout_toolbar_center_title)
 public class LvShiDetailsActivity extends BaseActivity<ILvShiDetailsView, LvShiDetailsPresent>
         implements ILvShiDetailsView {
     @BindView(R.id.iv_fanhui)
@@ -128,10 +131,10 @@ public class LvShiDetailsActivity extends BaseActivity<ILvShiDetailsView, LvShiD
     private ViewGroup.MarginLayoutParams layoutParams;
     private int types;
 
-    @Override
-    protected int provideContentViewId() {
-        return R.layout.activity_lvshidetails;
-    }
+    //    @Override
+    //    protected int provideContentViewId() {
+    //        return R.layout.activity_lvshidetails;
+    //    }
 
     //    @Override
     //    protected View provideLoadServiceRootView() {
@@ -146,12 +149,18 @@ public class LvShiDetailsActivity extends BaseActivity<ILvShiDetailsView, LvShiD
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        //        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
     }
 
     @Override
     protected void initView() {
         //        hideLoading();
+        setToolbarBackgroud(getResources().getColor(R.color.white));
+        setToolbarLeftImage(R.drawable.fanhui_hui, view -> onBackPressed());
+        setToolbarText(R.id.tv_global_title, "律师详情");
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         userName = getIntent().getStringExtra("userName");
         // types   1 点击首页item进入律师详情  2 从聊天页面点击头像和顶部卡片进入详情
         types = getIntent().getIntExtra("types", 0);

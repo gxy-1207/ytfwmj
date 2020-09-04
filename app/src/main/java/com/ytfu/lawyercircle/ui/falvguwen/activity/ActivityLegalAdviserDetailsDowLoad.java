@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.lee.annotation.InjectLayout;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.AppConstant;
 import com.ytfu.lawyercircle.base.BaseActivity;
@@ -26,7 +27,6 @@ import com.ytfu.lawyercircle.ui.pay.bean.AccountPayResponseBean;
 import com.ytfu.lawyercircle.ui.pay.bean.PayBean;
 import com.ytfu.lawyercircle.ui.pay.bean.WxPayBean;
 import com.ytfu.lawyercircle.utils.CommonUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.SnackbarUtils;
 import com.ytfu.lawyercircle.utils.SpUtil;
 
@@ -34,8 +34,12 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import qiu.niorgai.StatusBarCompat;
 
 /** @Auther gxy @Date 2019/11/21 @Des 法律顾问详情下载 */
+@InjectLayout(
+        value = R.layout.activity_flgw_details_download,
+        toolbarLayoutId = R.layout.layout_toolbar_center_title)
 public class ActivityLegalAdviserDetailsDowLoad
         extends BaseActivity<ILegalAdviserDetailsView, LegalAdviserDetailsPresenter>
         implements ILegalAdviserDetailsView {
@@ -86,10 +90,10 @@ public class ActivityLegalAdviserDetailsDowLoad
     private String id;
     private String doc_url;
 
-    @Override
-    protected int provideContentViewId() {
-        return R.layout.activity_flgw_details_download;
-    }
+    //    @Override
+    //    protected int provideContentViewId() {
+    //        return R.layout.activity_flgw_details_download;
+    //    }
 
     @Override
     protected LegalAdviserDetailsPresenter createPresenter() {
@@ -99,12 +103,17 @@ public class ActivityLegalAdviserDetailsDowLoad
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        //        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
     }
 
     @Override
     protected void initView() {
         //        hideLoading();
+        setToolbarBackgroud(getResources().getColor(R.color.white));
+        setToolbarLeftImage(R.drawable.fanhui_hui, view -> onBackPressed());
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         uid = SpUtil.getString(mContext, AppConstant.UID, "");
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
@@ -169,7 +178,8 @@ public class ActivityLegalAdviserDetailsDowLoad
     }
 
     private void setUi(LegalAdviserDetailsBean xinagQingBean) {
-        tvTopTitle.setText(xinagQingBean.getFind().getTitle());
+        //        tvTopTitle.setText(xinagQingBean.getFind().getTitle());
+        setToolbarText(R.id.tv_global_title, xinagQingBean.getFind().getTitle());
         tvBiaogeTitle.setText(xinagQingBean.getFind().getTitle());
         tvBiaogeMiaoshu.setText("\u3000\u3000" + xinagQingBean.getFind().getDescript());
         tvBiaogePrice.setText("￥" + xinagQingBean.getFind().getPrice());

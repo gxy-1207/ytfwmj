@@ -84,7 +84,8 @@ class RefundCommitActivity : BaseActivity<RefundCommitView, RefundCommitPresente
     @Suppress("DEPRECATION")
     override fun initData() {
         super.initData()
-        StatusBarCompat.setStatusBarColor(this, resources.getColor(R.color.transparent_4c))
+        StatusBarCompat.setStatusBarColor(this, resources.getColor(R.color.textColor_F8203A))
+        setToolbarBackgroud(resources.getColor(R.color.textColor_F8203A))
         setToolbarLeftImage(R.drawable.fanhui_bai) { onBackPressed() }
         setToolbarText(R.id.tv_global_title, "申请退款")
         val s = "<font color='#FF0000'>%d</font>/200".format(0)

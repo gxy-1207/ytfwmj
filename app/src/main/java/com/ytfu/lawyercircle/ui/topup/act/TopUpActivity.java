@@ -28,6 +28,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import qiu.niorgai.StatusBarCompat;
 
 @InjectLayout(
         value = R.layout.activity_topup,
@@ -100,7 +101,9 @@ public class TopUpActivity extends BaseActivity<TopUpView, TopUpPresenter> imple
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.textColor_F8203A));
         changeStatusBarTextColor(false);
+        setToolbarBackgroud(getResources().getColor(R.color.textColor_F8203A));
         setToolbarLeftImage(R.drawable.fanhui_bai, v -> onBackPressed());
         setToolbarText(R.id.tv_global_title, "充值");
     }

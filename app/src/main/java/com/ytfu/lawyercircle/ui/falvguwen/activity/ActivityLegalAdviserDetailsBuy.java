@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.lee.annotation.InjectLayout;
 import com.orhanobut.logger.Logger;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.App;
@@ -24,8 +25,6 @@ import com.ytfu.lawyercircle.ui.pay.PayHelper;
 import com.ytfu.lawyercircle.ui.pay.bean.AccountPayResponseBean;
 import com.ytfu.lawyercircle.ui.pay.bean.PayBean;
 import com.ytfu.lawyercircle.ui.pay.bean.WxPayBean;
-import com.ytfu.lawyercircle.utils.CommonUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.GlideManager;
 import com.ytfu.lawyercircle.utils.MessageEvent;
 import com.ytfu.lawyercircle.utils.SpUtil;
@@ -40,8 +39,12 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import qiu.niorgai.StatusBarCompat;
 
 /** @Auther gxy @Date 2019/11/21 @Des 法律顾问详情购买Activity */
+@InjectLayout(
+        value = R.layout.activity_flgw_details_buy,
+        toolbarLayoutId = R.layout.layout_toolbar_center_title)
 public class ActivityLegalAdviserDetailsBuy
         extends BaseActivity<ILegalAdviserDetailsView, LegalAdviserDetailsPresenter>
         implements ILegalAdviserDetailsView {
@@ -88,10 +91,10 @@ public class ActivityLegalAdviserDetailsBuy
     private String id;
     private int shoucang;
 
-    @Override
-    protected int provideContentViewId() {
-        return R.layout.activity_flgw_details_buy;
-    }
+    //    @Override
+    //    protected int provideContentViewId() {
+    //        return R.layout.activity_flgw_details_buy;
+    //    }
 
     @Override
     protected LegalAdviserDetailsPresenter createPresenter() {
@@ -101,12 +104,17 @@ public class ActivityLegalAdviserDetailsBuy
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        //        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
     }
 
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
+        setToolbarBackgroud(getResources().getColor(R.color.white));
+        setToolbarLeftImage(R.drawable.fanhui_hui, view -> onBackPressed());
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         uid = SpUtil.getString(mContext, AppConstant.UID, "");
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
@@ -264,7 +272,8 @@ public class ActivityLegalAdviserDetailsBuy
     }
 
     private void setUi(LegalAdviserDetailsBean xinagQingBean) {
-        tvTopTitle.setText(xinagQingBean.getFind().getTitle());
+        //        tvTopTitle.setText(xinagQingBean.getFind().getTitle());
+        setToolbarText(R.id.tv_global_title, xinagQingBean.getFind().getTitle());
         shoucang = xinagQingBean.getShoucang();
         GlideManager.loadImageByUrl(this, xinagQingBean.getFind().getImg(), ivFlgw);
         tvBiaogeTitle.setText(xinagQingBean.getFind().getTitle());

@@ -34,9 +34,11 @@ class LawyerAnswerActivity : BaseEmptyActivity() {
 
     override fun onSetViewData() {
         super.onSetViewData()
-        StatusBarCompat.setStatusBarColor(this, resources.color(R.color.transparent_4c))
-        changeStatusBarTextColor(false)
-        setToolbarLeftImage(R.drawable.fanhui_bai) { onBackPressed() }
+        StatusBarCompat.setStatusBarColor(this, resources.color(R.color.white))
+        changeStatusBarTextColor(true)
+        setToolbarBackgroundColor(resources.getColor(R.color.white))
+        setToolbarLeftImage(R.drawable.fanhui_hui) { onBackPressed() }
+        setToolbarTextColor(R.id.tv_global_title, resources.getColor(R.color.textColor_33))
         val userName = getBundleValue(KEY_USER_NAME, "")
         setToolbarText(R.id.tv_global_title, userName)
         val lid = getBundleValue(KEY_LID, "")

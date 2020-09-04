@@ -35,6 +35,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import qiu.niorgai.StatusBarCompat;
 
 /** 用户发送红包界面 */
 @InjectLayout(
@@ -143,6 +144,8 @@ public class SendRedPackageActivity
     protected void initData() {
         super.initData();
         hideLoading();
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.textColor_F8203A));
+        setToolbarBackgroud(getResources().getColor(R.color.textColor_F8203A));
         setToolbarText(R.id.tv_global_title, R.string.txt_send_red_package);
         setToolbarLeftImage(R.drawable.fanhui_bai, v -> onBackPressed());
 

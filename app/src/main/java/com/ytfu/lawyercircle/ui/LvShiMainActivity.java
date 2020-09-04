@@ -30,9 +30,7 @@ import com.ytfu.lawyercircle.ui.lvshiwenti.fragment.LawyerCounselingFragment;
 import com.ytfu.lawyercircle.ui.lvshiwode.fragment.LvShiWodeFragment;
 import com.ytfu.lawyercircle.ui.updatapk.UpDateApkBean;
 import com.ytfu.lawyercircle.utils.ApkUtil;
-import com.ytfu.lawyercircle.utils.CommonUtil;
 import com.ytfu.lawyercircle.utils.DemoHelper;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.SpUtil;
 
 import java.lang.ref.WeakReference;
@@ -127,7 +125,9 @@ public class LvShiMainActivity extends BaseActivity {
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        //        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
     }
 
     @Override
@@ -245,7 +245,7 @@ public class LvShiMainActivity extends BaseActivity {
         updateConfig.setDebug(AppConstant.DEBUG);
         // 自动添加后缀.apk
         updateConfig.setApkSaveName("云台法律咨询");
-        updateConfig.setNotifyImgRes(R.mipmap.icon_app_logo);
+        updateConfig.setNotifyImgRes(R.mipmap.mj_icon_app_logo);
         // 是否强制更新，强制时无取消按钮
         if (force) {
             updateConfig.setForce(true);

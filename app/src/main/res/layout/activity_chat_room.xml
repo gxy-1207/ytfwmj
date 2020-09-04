@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -44,13 +43,13 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@drawable/selector_white_to_gray"
-            android:drawableTop="@mipmap/icon_complaint"
+            android:drawableTop="@mipmap/mj_icon_complaint"
             android:drawablePadding="2dp"
             android:gravity="center"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:text="起诉状"
-            android:textColor="#555555"
+            android:textColor="@color/textColor_55"
             android:textSize="12sp" />
 
         <View
@@ -58,6 +57,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            android:visibility="gone"
             android:background="#f5f5f5" />
 
         <TextView
@@ -69,13 +69,13 @@
             android:layout_weight="1"
             android:background="@drawable/selector_white_to_gray"
 
-            android:drawableTop="@mipmap/icon_evaluate"
+            android:drawableTop="@mipmap/mj_icon_evaluate"
             android:drawablePadding="2dp"
             android:gravity="center"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:text="评价Ta"
-            android:textColor="#555555"
+            android:textColor="@color/textColor_55"
             android:textSize="12sp" />
 
         <View
@@ -83,6 +83,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            android:visibility="gone"
             android:background="#f5f5f5" />
 
         <TextView
@@ -93,16 +94,16 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@drawable/selector_white_to_gray"
-            android:drawableTop="@mipmap/icon_refund_money"
+            android:drawableTop="@mipmap/mj_icon_refund_money"
             android:drawablePadding="2dp"
             android:gravity="center"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:text="退款"
-            android:textColor="#555555"
+            android:textColor="@color/textColor_55"
             android:textSize="12sp"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
+
         <TextView
 
             android:id="@+id/tv_room_complaint"
@@ -111,22 +112,22 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@drawable/selector_white_to_gray"
-            android:drawableTop="@mipmap/icon_complaint"
+            android:drawableTop="@mipmap/mj_icon_tousu"
             android:drawablePadding="2dp"
             android:gravity="center"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:text="投诉"
-            android:textColor="#555555"
-            android:textSize="12sp"
-            />
+            android:textColor="@color/textColor_55"
+            android:textSize="12sp" />
+
         <View
             android:layout_width="0.5dp"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:background="#f5f5f5"
-            />
+            android:visibility="gone"
+            android:background="#f5f5f5" />
 
         <TextView
             android:id="@+id/tv_room_red"
@@ -136,13 +137,13 @@
             android:layout_weight="1"
             android:background="@drawable/selector_white_to_gray"
 
-            android:drawableTop="@mipmap/icon_red_package"
+            android:drawableTop="@mipmap/mj_icon_red_package"
             android:drawablePadding="2dp"
             android:gravity="center"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:text="@string/txt_send_red_package"
-            android:textColor="#555555"
+            android:textColor="@color/textColor_55"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -163,12 +164,12 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@drawable/selector_white_to_gray"
-            android:drawableTop="@drawable/fwh_hetongku"
+            android:drawableTop="@mipmap/mj_fwh_hetongku"
             android:drawablePadding="1dp"
             android:gravity="center"
             android:paddingTop="10dp"
             android:text="合同库"
-            android:textColor="#ff44a2f7"
+            android:textColor="@color/textColor_55"
             android:textSize="11sp" />
 
         <View
@@ -176,6 +177,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            android:visibility="gone"
             android:background="#f5f5f5" />
 
         <TextView
@@ -191,7 +193,7 @@
             android:paddingTop="10dp"
             android:text="免费写诉状"
             android:visibility="gone"
-            android:textColor="#ff44a2f7"
+            android:textColor="@color/textColor_55"
             android:textSize="11sp" />
 
         <View
@@ -209,12 +211,12 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@drawable/selector_white_to_gray"
-            android:drawableTop="@drawable/fwh_kaitingzhushou"
+            android:drawableTop="@mipmap/mj_fwh_kaitingzhushou"
             android:drawablePadding="1dp"
             android:gravity="center"
             android:paddingTop="10dp"
             android:text="开庭助手"
-            android:textColor="#ff44a2f7"
+            android:textColor="@color/textColor_55"
             android:textSize="11sp" />
 
         <View
@@ -222,6 +224,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            android:visibility="gone"
             android:background="#f5f5f5" />
 
         <TextView
@@ -231,12 +234,12 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@drawable/selector_white_to_gray"
-            android:drawableTop="@drawable/fwh_falvguwen"
+            android:drawableTop="@mipmap/mj_fwh_falvguwen"
             android:drawablePadding="1dp"
             android:gravity="center"
             android:paddingTop="10dp"
             android:text="法律顾问"
-            android:textColor="#ff44a2f7"
+            android:textColor="@color/textColor_55"
             android:textSize="11sp" />
     </LinearLayout>
 
