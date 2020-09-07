@@ -21,14 +21,13 @@ import com.ytfu.lawyercircle.ui.mine.activity.ActivitySetEmail;
 import com.ytfu.lawyercircle.ui.mine.activity.ActivitySetPwd;
 import com.ytfu.lawyercircle.ui.mine.activity.ActivityUpDataPwd;
 import com.ytfu.lawyercircle.ui.mine.bean.InformationBean;
-import com.ytfu.lawyercircle.utils.CommonUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.LoginHelper;
 import com.ytfu.lawyercircle.utils.SpUtil;
 import com.ytfu.lawyercircle.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import qiu.niorgai.StatusBarCompat;
 
 public class LawyerSettingActivity extends BaseActivity<LawyerSettingView, LawyerSettingPresenter>
         implements LawyerSettingView {
@@ -60,7 +59,9 @@ public class LawyerSettingActivity extends BaseActivity<LawyerSettingView, Lawye
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        //        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
     }
 
     // ===Desc:=================================================================
@@ -89,9 +90,11 @@ public class LawyerSettingActivity extends BaseActivity<LawyerSettingView, Lawye
     @Override
     protected void initData() {
         tv_room_title.setText(R.string.setting);
+        tv_room_title.setTextColor(getResources().getColor(R.color.textColor_33));
         tl_setting_toolbar.setTitle("");
         setSupportActionBar(tl_setting_toolbar);
-        tl_setting_toolbar.setNavigationIcon(R.drawable.fanhui_bai);
+        tl_setting_toolbar.setBackgroundColor(getResources().getColor(R.color.white));
+        tl_setting_toolbar.setNavigationIcon(R.drawable.fanhui_hui);
         tl_setting_toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         String uid = SpUtil.getString(mContext, AppConstant.UID, "");

@@ -42,7 +42,7 @@
                     android:layout_height="65dp"
                     android:layout_marginLeft="16dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/logo"
+                    android:src="@mipmap/mj_icon_app_logo"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

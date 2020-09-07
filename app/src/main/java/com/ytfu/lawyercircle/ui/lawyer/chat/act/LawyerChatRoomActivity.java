@@ -84,6 +84,7 @@ import java.util.List;
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import qiu.niorgai.StatusBarCompat;
 
 /** 律师聊天界面 */
 public class LawyerChatRoomActivity
@@ -310,12 +311,14 @@ public class LawyerChatRoomActivity
 
     @Override
     protected void initView() {
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
         getPresenter().registerMessageListener();
 
         // ===Desc:设置Toolbar相关=================================================================
         toolbar.setTitle("");
-        toolbar.setBackgroundColor(getResources().getColor(R.color.transparent_4c));
-        toolbar.setNavigationIcon(R.drawable.fanhui_bai);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
+        toolbar.setNavigationIcon(R.drawable.fanhui_hui);
         toolbar.setNavigationOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -325,6 +328,7 @@ public class LawyerChatRoomActivity
                 });
         String toUserName = getBundleString(KEY_TO_USER_NAME, getString(R.string.app_name));
         tv_global_title.setText(toUserName);
+        tv_global_title.setTextColor(getResources().getColor(R.color.textColor_33));
         // ===Desc:顶部按钮相关=================================================================
         tv_room_fee.setOnClickListener(v -> showFwfAlertDialog());
         findViewById(R.id.tv_room_advisory)

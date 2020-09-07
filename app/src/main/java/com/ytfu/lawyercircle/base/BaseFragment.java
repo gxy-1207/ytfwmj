@@ -3,6 +3,7 @@ package com.ytfu.lawyercircle.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -288,6 +289,13 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
         tv.setText(titleId);
     }
 
+    protected void setToolbarBackgroud(@ColorInt int color) {
+        if (null == mToolbar) {
+            Logger.w("You do not set Toolbar, Please set a valid Toolbar");
+            return;
+        }
+        mToolbar.setBackgroundColor(color);
+    }
     /** 设置Toolbar中控件的点击事件 */
     protected void setToolbarViewClickListener(
             @IdRes int viewId, @androidx.annotation.Nullable View.OnClickListener listener) {
@@ -450,6 +458,18 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
             params.alpha = f;
             window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             window.setAttributes(params);
+        }
+    }
+    /** 更换StatusBar上面文本颜色,只支持黑色和白色 */
+    protected void changeStatusBarTextColor(boolean isBlack) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            int visibility;
+            if (isBlack) {
+                visibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            } else {
+                visibility = View.SYSTEM_UI_FLAG_VISIBLE;
+            }
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(visibility);
         }
     }
 

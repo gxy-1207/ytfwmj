@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.lee.annotation.InjectLayout;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.AppConstant;
 import com.ytfu.lawyercircle.base.BaseActivity;
@@ -18,16 +19,18 @@ import com.ytfu.lawyercircle.ui.mine.adaper.CollectionContractAdaper;
 import com.ytfu.lawyercircle.ui.mine.bean.CollectionListBean;
 import com.ytfu.lawyercircle.ui.mine.present.CollectionPresenter;
 import com.ytfu.lawyercircle.ui.mine.view.ICollectionView;
-import com.ytfu.lawyercircle.utils.CommonUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.SpUtil;
 
 import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import qiu.niorgai.StatusBarCompat;
 
 /** @Auther gxy @Date 2019/11/15 @Des 我的收藏 */
+@InjectLayout(
+        value = R.layout.activity_mine_collection,
+        toolbarLayoutId = R.layout.layout_toolbar_center_title)
 public class ActivityMineCollection extends BaseActivity<ICollectionView, CollectionPresenter>
         implements ICollectionView {
 
@@ -46,10 +49,10 @@ public class ActivityMineCollection extends BaseActivity<ICollectionView, Collec
     private CollectionContractAdaper contractAdaper;
     private String uid;
 
-    @Override
-    protected int provideContentViewId() {
-        return R.layout.activity_mine_collection;
-    }
+    //    @Override
+    //    protected int provideContentViewId() {
+    //        return R.layout.activity_mine_collection;
+    //    }
 
     @Override
     protected View provideLoadServiceRootView() {
@@ -69,12 +72,18 @@ public class ActivityMineCollection extends BaseActivity<ICollectionView, Collec
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        //        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
     }
 
     @Override
     protected void initView() {
-        tvTopTitle.setText("我的合同");
+        setToolbarBackgroud(getResources().getColor(R.color.white));
+        setToolbarLeftImage(R.drawable.fanhui_hui, view -> onBackPressed());
+        setToolbarText(R.id.tv_global_title, "我的合同");
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
+        //        tvTopTitle.setText("我的合同");
         uid = SpUtil.getString(mContext, AppConstant.UID, "");
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);

@@ -20,6 +20,6 @@ class EvaluateListAdaper : QuickAdapter<Shuju>(R.layout.item_user_evaluate) {
         holder.setText(R.id.tv_content, item?.name)
         holder.setText(R.id.tv_leixing, item?.cid)
         holder.setText(R.id.tv_num, item?.count)
-        holder.setBackgroundResource(R.id.iv_ta_icon, R.drawable.logo)
+        holder.setBackgroundResource(R.id.iv_ta_icon, R.mipmap.mj_icon_app_logo)
     }
 }

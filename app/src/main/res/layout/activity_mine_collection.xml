@@ -8,7 +8,8 @@
 
     <include
         layout="@layout/incld_title_center"
-        />
+        android:visibility="gone" />
+
     <EditText
         android:id="@+id/et_collect_seatch"
         android:layout_width="match_parent"
@@ -24,6 +25,7 @@
         android:textColor="#B9B9B9"
         android:visibility="gone"
         android:textSize="12sp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rl_collection"
         android:layout_width="match_parent"
@@ -31,7 +33,6 @@
         android:scrollbars="none"
         android:overScrollMode="never"
         tools:itemCount="5"
-        tools:listitem="@layout/item_relevant_contract"
-        />
+        tools:listitem="@layout/item_relevant_contract" />
 
 </LinearLayout>

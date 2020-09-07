@@ -55,6 +55,7 @@ public class LawyerCounselingFragment
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            changeStatusBarTextColor(true);
             getPresenter().refresh();
         }
     }
@@ -62,7 +63,10 @@ public class LawyerCounselingFragment
     @Override
     protected void initData() {
         super.initData();
+        changeStatusBarTextColor(true);
+        setToolbarBackgroud(getResources().getColor(R.color.white));
         setToolbarText(R.id.tv_global_title, "咨询问题");
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         SwipeRefreshLayout swipeRefreshLayout = getSwipeRefreshLayout();
         swipeRefreshLayout.setBackgroundColor(Color.parseColor("#f2f2f2"));
         mAdapter.setOnItemClickListener(

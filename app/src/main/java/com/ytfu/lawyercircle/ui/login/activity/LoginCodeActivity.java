@@ -96,7 +96,7 @@ public class LoginCodeActivity extends BaseActivity<ICodeView, CodePresent>
             //      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.transparent_half));
         }
-        LoginHelper.getInstance().cleanLoginInfo();
+        //        LoginHelper.getInstance().cleanLoginInfo();
     }
 
     @Override

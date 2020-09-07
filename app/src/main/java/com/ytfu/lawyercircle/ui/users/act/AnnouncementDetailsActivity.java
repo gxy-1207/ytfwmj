@@ -13,6 +13,7 @@ import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.base.BaseActivity;
 
 import butterknife.BindView;
+import qiu.niorgai.StatusBarCompat;
 
 /** @Auther gxy @Date 2020/6/12 @Des 公告详情 */
 @InjectLayout(
@@ -46,11 +47,13 @@ public class AnnouncementDetailsActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         hideLoading();
-        changeStatusBarTextColor(false);
-        setToolbarLeftImage(R.drawable.fanhui_bai, v -> onBackPressed());
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
+        setToolbarBackgroud(getResources().getColor(R.color.white));
+        setToolbarLeftImage(R.drawable.fanhui_hui, v -> onBackPressed());
         String title = getBundleString(KEY_TITLE, "公告详情");
         setToolbarText(R.id.tv_global_title, title);
-
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         webView.setHorizontalScrollBarEnabled(false); // 水平不显示
         webView.setVerticalScrollBarEnabled(false); // 垂直不显示
         String url = getBundleString(KEY_URL, "");

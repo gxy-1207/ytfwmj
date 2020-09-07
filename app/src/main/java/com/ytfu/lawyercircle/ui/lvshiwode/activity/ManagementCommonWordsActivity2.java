@@ -32,112 +32,119 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import qiu.niorgai.StatusBarCompat;
 
-/**
- * @Auther gxy
- * @Date 2020/7/14
- * @Des 管理常用语
- */
-@InjectLayout(value = R.layout.activity_management_common_words2, toolbarLayoutId = R.layout.layout_toolbar_center_title)
-@ InjectPresenter(ManagementCommonWordsPresenter2.class)
-public class ManagementCommonWordsActivity2 extends BaseActivity<ManagementCommonWordsView2, ManagementCommonWordsPresenter2> implements ManagementCommonWordsView2 {
-
+/** @Auther gxy @Date 2020/7/14 @Des 管理常用语 */
+@InjectLayout(
+        value = R.layout.activity_management_common_words2,
+        toolbarLayoutId = R.layout.layout_toolbar_center_title)
+@InjectPresenter(ManagementCommonWordsPresenter2.class)
+public class ManagementCommonWordsActivity2
+        extends BaseActivity<ManagementCommonWordsView2, ManagementCommonWordsPresenter2>
+        implements ManagementCommonWordsView2 {
 
     @BindView(R.id.lvshi_mine_common_words)
     MagicIndicator lvshiMineCommonWords;
+
     @BindView(R.id.vp_common_words)
     ViewPager vpCommonWords;
+
     private List<Fragment> fragmentList = new ArrayList<>();
+
     public static void start(Context context) {
         Intent starter = new Intent(context, ManagementCommonWordsActivity2.class);
-//        starter.putExtra();
+        //        starter.putExtra();
         context.startActivity(starter);
-
     }
 
     @Override
     protected void initData() {
         super.initData();
-        changeStatusBarTextColor(false);
-        setToolbarLeftImage(R.drawable.fanhui_bai, v -> {
-            onBackPressed();
-        });
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
+        setToolbarBackgroud(getResources().getColor(R.color.white));
+        setToolbarLeftImage(
+                R.drawable.fanhui_hui,
+                v -> {
+                    onBackPressed();
+                });
         setToolbarText(R.id.tv_global_title, "管理常用语");
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         getPresenter().getClassificationOfCommonWords();
     }
 
     @Override
     public void onCategorySuccess(ClassificationOfCommonWordsBean classification) {
         CommonNavigator commonNavigator = new CommonNavigator(this);
-        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
-            @Override
-            public int getCount() {
-                return classification.getList().size();
-            }
-
-            @Override
-            public IPagerTitleView getTitleView(Context context, int i) {
-                CommonPagerTitleView view = new CommonPagerTitleView(mContext);
-                view.setContentView(R.layout.layout_title);
-                TextView tv_title = view.findViewById(R.id.tv_title);
-                tv_title.setText(classification.getList().get(i).getContent());
-                view.setOnPagerTitleChangeListener(new CommonPagerTitleView.OnPagerTitleChangeListener() {
+        commonNavigator.setAdapter(
+                new CommonNavigatorAdapter() {
                     @Override
-                    public void onSelected(int index, int totalCount) {
-                            tv_title.setTextColor(Color.parseColor("#44A2F7"));
+                    public int getCount() {
+                        return classification.getList().size();
                     }
 
                     @Override
-                    public void onDeselected(int index, int totalCount) {
-                        tv_title.setTextColor(Color.parseColor("#666666"));
+                    public IPagerTitleView getTitleView(Context context, int i) {
+                        CommonPagerTitleView view = new CommonPagerTitleView(mContext);
+                        view.setContentView(R.layout.layout_title);
+                        TextView tv_title = view.findViewById(R.id.tv_title);
+                        tv_title.setText(classification.getList().get(i).getContent());
+                        view.setOnPagerTitleChangeListener(
+                                new CommonPagerTitleView.OnPagerTitleChangeListener() {
+                                    @Override
+                                    public void onSelected(int index, int totalCount) {
+                                        tv_title.setTextColor(Color.parseColor("#f8203a"));
+                                    }
+
+                                    @Override
+                                    public void onDeselected(int index, int totalCount) {
+                                        tv_title.setTextColor(Color.parseColor("#666666"));
+                                    }
+
+                                    @Override
+                                    public void onLeave(int i, int i1, float v, boolean b) {}
+
+                                    @Override
+                                    public void onEnter(int i, int i1, float v, boolean b) {}
+                                });
+                        view.setOnClickListener(
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        //                        if
+                                        // (findViewById(R.id.rv_common_words_root).isShown()) {
+                                        vpCommonWords.setCurrentItem(i);
+                                        //                        }else{
+                                        //                            LogUtils.e("获取数据");
+                                        //                        }
+                                    }
+                                });
+                        return view;
                     }
 
                     @Override
-                    public void onLeave(int i, int i1, float v, boolean b) {
-
-                    }
-
-                    @Override
-                    public void onEnter(int i, int i1, float v, boolean b) {
-
+                    public IPagerIndicator getIndicator(Context context) {
+                        return null;
                     }
                 });
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-//                        if (findViewById(R.id.rv_common_words_root).isShown()) {
-                            vpCommonWords.setCurrentItem(i);
-//                        }else{
-//                            LogUtils.e("获取数据");
-//                        }
-                    }
-                });
-                return view;
-            }
-
-            @Override
-            public IPagerIndicator getIndicator(Context context) {
-                return null;
-            }
-        });
         lvshiMineCommonWords.setNavigator(commonNavigator);
-        vpCommonWords.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
-            @NonNull
-            @Override
-            public Fragment getItem(int position) {
-                return ManagementCommonWordsFragment.newInstance(classification.getList().get(position).getId());
-            }
+        vpCommonWords.setAdapter(
+                new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+                    @NonNull
+                    @Override
+                    public Fragment getItem(int position) {
+                        return ManagementCommonWordsFragment.newInstance(
+                                classification.getList().get(position).getId());
+                    }
 
-            @Override
-            public int getCount() {
-                return classification.getList().size();
-            }
-        });
-        ViewPagerHelper.bind(lvshiMineCommonWords,vpCommonWords);
+                    @Override
+                    public int getCount() {
+                        return classification.getList().size();
+                    }
+                });
+        ViewPagerHelper.bind(lvshiMineCommonWords, vpCommonWords);
     }
 
     @Override
-    public void onfiledError(String error) {
-
-    }
+    public void onfiledError(String error) {}
 }

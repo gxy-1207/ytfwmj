@@ -111,9 +111,11 @@ public class ChatListFragment extends BaseFragment<IChatListView, ChatListPresen
             if (null != activity) {
                 if (SpUtil.getString(mContext, AppConstant.SHENFEN, "1").equals("2")) {
                     StatusBarCompat.setStatusBarColor(
-                            activity, getResources().getColor(R.color.transparent_4c));
+                            activity, getResources().getColor(R.color.white));
+                    changeStatusBarTextColor(true);
                 } else {
                     StatusBarCompat.setStatusBarColor(activity, Color.WHITE);
+                    changeStatusBarTextColor(true);
                     FragmentActivity fragmentActivity = getActivity();
                     if (fragmentActivity != null) {
                         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
@@ -171,7 +173,7 @@ public class ChatListFragment extends BaseFragment<IChatListView, ChatListPresen
                 tvEdit.setBackgroundColor(Color.TRANSPARENT);
                 tvDelete.setBackgroundColor(Color.TRANSPARENT);
                 tvEdit.setTextColor(Color.WHITE);
-                tvDelete.setTextColor(Color.WHITE);
+                tvDelete.setTextColor(getResources().getColor(R.color.textColor_F8203A));
             }
             tvEdit.setOnClickListener(
                     view -> {
@@ -214,8 +216,8 @@ public class ChatListFragment extends BaseFragment<IChatListView, ChatListPresen
         String type = SpUtil.getString(mContext, AppConstant.SHENFEN, "1");
         if (type.equals("2")) {
             rootView.findViewById(R.id.tl_title_toolbar)
-                    .setBackgroundColor(getResources().getColor(R.color.transparent_4c));
-            setToolbarTextColor(R.id.tv_toolbar_title, Color.WHITE);
+                    .setBackgroundColor(getResources().getColor(R.color.white));
+            setToolbarTextColor(R.id.tv_toolbar_title, Color.parseColor("#434343"));
         } else {
             rootView.findViewById(R.id.tl_title_toolbar).setBackgroundColor(Color.WHITE);
             setToolbarTextColor(R.id.tv_toolbar_title, Color.parseColor("#434343"));
@@ -402,6 +404,7 @@ public class ChatListFragment extends BaseFragment<IChatListView, ChatListPresen
         if (null != mToolbar) {
             mToolbar.findViewById(R.id.tv_chat_delete).setVisibility(View.INVISIBLE);
             TextView tv = mToolbar.findViewById(R.id.tv_chat_edit);
+            tv.setTextColor(getResources().getColor(R.color.textColor_33));
             tv.setText("编辑");
         }
         adapter.removeHeaderView(selectAllView);

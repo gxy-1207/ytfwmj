@@ -16,6 +16,7 @@
         app:cardBackgroundColor="#EEEEEE"
         app:cardCornerRadius="5dp"
         app:cardElevation="0dp">
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="婚姻家事"
-                android:textColor="#ff44a2f7"
+                android:textColor="@color/textColor_F8203A"
                 android:textSize="12sp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

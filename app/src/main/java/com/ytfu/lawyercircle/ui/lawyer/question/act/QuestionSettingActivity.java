@@ -142,11 +142,12 @@ public class QuestionSettingActivity
     @Override
     protected void initData() {
         super.initData();
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.transparent_4c));
-        changeStatusBarTextColor(false);
-        setToolbarLeftImage(R.drawable.fanhui_bai, v -> onBackPressed());
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
+        setToolbarBackgroud(getResources().getColor(R.color.white));
+        setToolbarLeftImage(R.drawable.fanhui_hui, v -> onBackPressed());
         setToolbarText(R.id.tv_global_title, R.string.txt_question_answer);
-
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         QuestionResponseBean.DataBean data = getBundleParcelable(KEY_QUESTION);
         if (null == data) {
             showToast("应用程序异常,请稍后重试");

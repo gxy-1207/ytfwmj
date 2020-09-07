@@ -355,25 +355,28 @@ public class LvShiMainActivity extends BaseActivity {
             tvMainBottomWode.setTextColor(getResources().getColor(R.color.textColor_66));
         }
         img.setEnabled(false);
-        text.setTextColor(getResources().getColor(R.color.textColor_collect_audio_Select));
+        text.setTextColor(getResources().getColor(R.color.textColor_F8203A));
     }
 
     private void changeFragment(int i) {
         beginTransaction = getSupportFragmentManager().beginTransaction();
         hideFragment(beginTransaction);
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         switch (i) {
             case 0:
                 // 问题
                 beginTransaction.show(lvShiWenTiFragment);
+                changeStatusBarTextColor(true);
                 break;
             case 1:
                 // 消息
                 beginTransaction.show(chatListFragment);
+                changeStatusBarTextColor(true);
                 break;
             case 2:
                 // 合同
                 beginTransaction.show(lvShiHeTongFragment);
+                changeStatusBarTextColor(true);
                 break;
             case 3:
                 // 我的

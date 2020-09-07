@@ -194,10 +194,7 @@ public class ActivityLegalAdviserZaiZhiList
                                     @Override
                                     public void onSelected(int i, int i1) {
                                         textView.setTextColor(
-                                                getResources()
-                                                        .getColor(
-                                                                R.color
-                                                                        .textColor_collect_audio_Select));
+                                                getResources().getColor(R.color.textColor_F8203A));
                                         GlideManager.loadImageByUrl(
                                                 ActivityLegalAdviserZaiZhiList.this,
                                                 list.get(i).getNav_img(),
