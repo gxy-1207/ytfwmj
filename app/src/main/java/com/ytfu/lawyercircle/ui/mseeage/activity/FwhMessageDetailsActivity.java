@@ -5,11 +5,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.github.lee.annotation.InjectLayout;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.base.BaseActivity;
 import com.ytfu.lawyercircle.base.BasePresenter;
-import com.ytfu.lawyercircle.utils.CommonUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -18,12 +17,18 @@ import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import qiu.niorgai.StatusBarCompat;
 
+@InjectLayout(
+        value = R.layout.activity_fwh_zixun_details,
+        toolbarLayoutId = R.layout.layout_toolbar_center_title)
 public class FwhMessageDetailsActivity extends BaseActivity {
     @BindView(R.id.iv_fanhui)
     ImageView ivFanhui;
+
     @BindView(R.id.tv_top_title)
     TextView tvTopTitle;
+
     @BindView(R.id.webView)
     WebView webView;
 
@@ -33,10 +38,10 @@ public class FwhMessageDetailsActivity extends BaseActivity {
     private String url;
 
     //    private String[] imageUrls = StringUtils.returnImageUrlsFromHtml();
-    @Override
-    protected int provideContentViewId() {
-        return R.layout.activity_fwh_zixun_details;
-    }
+    //    @Override
+    //    protected int provideContentViewId() {
+    //        return R.layout.activity_fwh_zixun_details;
+    //    }
 
     @Override
     protected BasePresenter createPresenter() {
@@ -46,21 +51,29 @@ public class FwhMessageDetailsActivity extends BaseActivity {
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        //        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
     }
 
     @Override
     protected void initView() {
         hideLoading();
+        String title = getIntent().getStringExtra("title");
+        setToolbarBackgroud(getResources().getColor(R.color.white));
+        setToolbarLeftImage(R.drawable.fanhui_hui, view -> onBackPressed());
+        setToolbarText(R.id.tv_global_title, title);
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         url = getIntent().getStringExtra("url");
-//        ToastUtil.showToast(url);
-//        try {
-//            html = getHtml(url);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        ToastUtil.showToast(html);
-//        imageUrls = StringUtils.returnImageUrlsFromHtml(html);
+
+        //        ToastUtil.showToast(url);
+        //        try {
+        //            html = getHtml(url);
+        //        } catch (Exception e) {
+        //            e.printStackTrace();
+        //        }
+        //        ToastUtil.showToast(html);
+        //        imageUrls = StringUtils.returnImageUrlsFromHtml(html);
     }
 
     @Override
@@ -80,43 +93,42 @@ public class FwhMessageDetailsActivity extends BaseActivity {
         webView.getSettings().setAllowFileAccessFromFileURLs(true);
         webView.setHorizontalScrollBarEnabled(false);
         webView.loadUrl(url);
-//        webView.addJavascriptInterface(new MJavascriptInterface(this, imageUrls), "imagelistener");
-//        webView.setWebViewClient(new MyWebViewClient());
+        //        webView.addJavascriptInterface(new MJavascriptInterface(this, imageUrls),
+        // "imagelistener");
+        //        webView.setWebViewClient(new MyWebViewClient());
     }
 
     /**
-     * @param aUrl    网址
-     *
+     * @param aUrl 网址
      * @return 返回的HTML代码
      * @throws Exception 对外抛出异常
      */
-//    public String getHTML(String aUrl) throws Exception {
-//        URL url = new URL(aUrl);
-//        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//        conn.setConnectTimeout(5000);
-//        conn.setRequestMethod("GET");
-//        if (conn.getResponseCode() == 200) {
-//            InputStream inputStream = conn.getInputStream();
-//            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-//            byte[] buffer = new byte[1024];
-//            int len = 0;
-//            while ((len = inputStream.read(buffer)) != -1) {
-//                outStream.write(buffer, 0, len);
-//            }
-//            String htmlStr = new String(outStream.toByteArray());
-//            inputStream.close();
-//            outStream.close();
-//            return htmlStr;
-//        }
-//        return null;
-//    }
+    //    public String getHTML(String aUrl) throws Exception {
+    //        URL url = new URL(aUrl);
+    //        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    //        conn.setConnectTimeout(5000);
+    //        conn.setRequestMethod("GET");
+    //        if (conn.getResponseCode() == 200) {
+    //            InputStream inputStream = conn.getInputStream();
+    //            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+    //            byte[] buffer = new byte[1024];
+    //            int len = 0;
+    //            while ((len = inputStream.read(buffer)) != -1) {
+    //                outStream.write(buffer, 0, len);
+    //            }
+    //            String htmlStr = new String(outStream.toByteArray());
+    //            inputStream.close();
+    //            outStream.close();
+    //            return htmlStr;
+    //        }
+    //        return null;
+    //    }
 
     /**
      * 获取HTML数据
      *
      * @author David
      */
-
     public static String getHtml(String path) throws Exception {
         // 通过网络地址创建URL对象
         URL url = new URL(path);
@@ -125,9 +137,9 @@ public class FwhMessageDetailsActivity extends BaseActivity {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // 设定URL的请求类别，有POST、GET 两类
         conn.setRequestMethod("GET");
-        //设置从主机读取数据超时（单位：毫秒）
+        // 设置从主机读取数据超时（单位：毫秒）
         conn.setConnectTimeout(5000);
-        //设置连接主机超时（单位：毫秒）
+        // 设置连接主机超时（单位：毫秒）
         conn.setReadTimeout(5000);
         // 通过打开的连接读取的输入流,获取html数据
         InputStream inStream = conn.getInputStream();
@@ -163,13 +175,16 @@ public class FwhMessageDetailsActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Glide.get(FwhMessageDetailsActivity.this).clearDiskCache();//清理磁盘缓存需要在子线程中执行
-            }
-        }).start();
-        Glide.get(this).clearMemory();//清理内存缓存可以在UI主线程中进行
+        new Thread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                Glide.get(FwhMessageDetailsActivity.this)
+                                        .clearDiskCache(); // 清理磁盘缓存需要在子线程中执行
+                            }
+                        })
+                .start();
+        Glide.get(this).clearMemory(); // 清理内存缓存可以在UI主线程中进行
         super.onDestroy();
     }
 }

@@ -219,7 +219,7 @@ class AudioDetailActivity : BaseActivity<AudioDetailView, AudioDetailPresenter>(
                 val view = SimplePagerTitleView(mContext)
                 view.textSize = 13f
                 view.normalColor = Color.parseColor("#A1A1A1")
-                view.selectedColor = Color.parseColor("#2998F5")
+                view.selectedColor = Color.parseColor("#f8203a")
                 view.text = if (p1 == 0) "音频简介" else "同类音频"
                 view.setOnClickListener { vp_audio_detail_content.currentItem = p1 }
                 return view
@@ -230,7 +230,7 @@ class AudioDetailActivity : BaseActivity<AudioDetailView, AudioDetailPresenter>(
             override fun getIndicator(p0: Context?): IPagerIndicator {
                 val indicator = LinePagerIndicator(mContext)
                 indicator.lineHeight = XPopupUtils.dp2px(mContext, 2f).toFloat()
-                indicator.setColors(Color.parseColor("#289AF6"))
+                indicator.setColors(Color.parseColor("#f8203a"))
                 indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
                 return indicator
             }

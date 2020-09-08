@@ -3,7 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <include layout="@layout/incld_title_cha_center" />
+
+    <include
+        layout="@layout/incld_title_cha_center"
+        android:visibility="gone" />
+
     <WebView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

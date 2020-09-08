@@ -30,9 +30,10 @@ import java.util.List;
 import butterknife.BindView;
 import qiu.niorgai.StatusBarCompat;
 
-
 @InjectPresenter(AudioClassificationPresenter.class)
-@InjectLayout(value = R.layout.activity_audio_classification, toolbarLayoutId = R.layout.layout_toolbar_center_title)
+@InjectLayout(
+        value = R.layout.activity_audio_classification,
+        toolbarLayoutId = R.layout.layout_toolbar_center_title)
 public class AudioClassificationActivity
         extends BaseActivity<AudioClassificationView, AudioClassificationPresenter>
         implements AudioClassificationView {
@@ -41,6 +42,7 @@ public class AudioClassificationActivity
 
     @BindView(R.id.mi_audio_titles)
     MagicIndicator mi_audio_titles;
+
     @BindView(R.id.vp_audio_content)
     ViewPager vp_audio_content;
 
@@ -49,10 +51,9 @@ public class AudioClassificationActivity
         context.startActivity(starter);
     }
 
-    //===Desc:================================================================================
+    // ===Desc:================================================================================
 
-
-   /* @Override
+    /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.user_home_menu, menu);
         return true;
@@ -86,44 +87,45 @@ public class AudioClassificationActivity
         adapter = new AudioClassificationPageAdapter(getSupportFragmentManager());
         vp_audio_content.setAdapter(adapter);
 
-        //获取分类
+        // 获取分类
         getPresenter().getAudioClassify();
     }
 
-    //===Desc:================================================================================
+    // ===Desc:================================================================================
     @Override
     public void onGetAudioClassify(List<AudioNavBean.ListBean> list) {
         adapter.setData(list);
         adapter.notifyDataSetChanged();
 
-        //设置控件
+        // 设置控件
         final CommonNavigator cv = new CommonNavigator(this);
-        cv.setAdapter(new CommonNavigatorAdapter() {
-            @Override
-            public int getCount() {
-                return list.size();
-            }
+        cv.setAdapter(
+                new CommonNavigatorAdapter() {
+                    @Override
+                    public int getCount() {
+                        return list.size();
+                    }
 
-            @Override
-            public IPagerTitleView getTitleView(Context context, int i) {
-                SimplePagerTitleView view = new SimplePagerTitleView(mContext);
-                view.setTextSize(13);
-                view.setNormalColor(Color.parseColor("#A1A1A1"));
-                view.setSelectedColor(Color.parseColor("#2998F5"));
-                view.setText(list.get(i).getLabel());
-                view.setOnClickListener(view1 -> vp_audio_content.setCurrentItem(i));
-                return view;
-            }
+                    @Override
+                    public IPagerTitleView getTitleView(Context context, int i) {
+                        SimplePagerTitleView view = new SimplePagerTitleView(mContext);
+                        view.setTextSize(13);
+                        view.setNormalColor(Color.parseColor("#A1A1A1"));
+                        view.setSelectedColor(Color.parseColor("#f8203a"));
+                        view.setText(list.get(i).getLabel());
+                        view.setOnClickListener(view1 -> vp_audio_content.setCurrentItem(i));
+                        return view;
+                    }
 
-            @Override
-            public IPagerIndicator getIndicator(Context context) {
-                LinePagerIndicator indicator = new LinePagerIndicator(context);
-                indicator.setLineHeight(XPopupUtils.dp2px(context, 2));
-                indicator.setColors(Color.parseColor("#289AF6"));
-                indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
-                return indicator;
-            }
-        });
+                    @Override
+                    public IPagerIndicator getIndicator(Context context) {
+                        LinePagerIndicator indicator = new LinePagerIndicator(context);
+                        indicator.setLineHeight(XPopupUtils.dp2px(context, 2));
+                        indicator.setColors(Color.parseColor("#f8203a"));
+                        indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
+                        return indicator;
+                    }
+                });
         mi_audio_titles.setNavigator(cv);
         ViewPagerHelper.bind(mi_audio_titles, vp_audio_content);
     }

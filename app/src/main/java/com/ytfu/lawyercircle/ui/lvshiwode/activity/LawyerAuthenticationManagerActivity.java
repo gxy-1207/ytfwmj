@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.lee.annotation.InjectLayout;
 import com.orhanobut.logger.Logger;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.apis.HttpUtil;
@@ -16,8 +17,6 @@ import com.ytfu.lawyercircle.base.BasePresenter;
 import com.ytfu.lawyercircle.helper.BaseRxObserver;
 import com.ytfu.lawyercircle.helper.RxLifecycleUtil;
 import com.ytfu.lawyercircle.ui.lvshiwode.bean.LawyreManagerBean;
-import com.ytfu.lawyercircle.utils.CommonUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.GlideManager;
 import com.ytfu.lawyercircle.utils.SpUtil;
 
@@ -25,8 +24,12 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import qiu.niorgai.StatusBarCompat;
 
 /** @Auther gxy @Date 2020/5/27 @Des 律师认证管理 */
+@InjectLayout(
+        value = R.layout.activity_lawyer_authentiction_manager,
+        toolbarLayoutId = R.layout.layout_toolbar_center_title)
 public class LawyerAuthenticationManagerActivity extends BaseActivity {
     @BindView(R.id.iv_fanhui)
     ImageView ivFanhui;
@@ -54,10 +57,10 @@ public class LawyerAuthenticationManagerActivity extends BaseActivity {
 
     private String uid;
 
-    @Override
-    protected int provideContentViewId() {
-        return R.layout.activity_lawyer_authentiction_manager;
-    }
+    //    @Override
+    //    protected int provideContentViewId() {
+    //        return R.layout.activity_lawyer_authentiction_manager;
+    //    }
 
     @Override
     protected BasePresenter createPresenter() {
@@ -72,12 +75,17 @@ public class LawyerAuthenticationManagerActivity extends BaseActivity {
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        //        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.textColor_F8203A));
+        changeStatusBarTextColor(false);
     }
 
     @Override
     protected void initView() {
         hideLoading();
+        setToolbarBackgroud(getResources().getColor(R.color.textColor_F8203A));
+        setToolbarLeftImage(R.drawable.fanhui_bai, view -> onBackPressed());
+        setToolbarText(R.id.tv_global_title, "律师认证管理");
         tvTopTitle.setText("律师认证管理");
         uid = SpUtil.getString(mContext, AppConstant.UID, "");
     }

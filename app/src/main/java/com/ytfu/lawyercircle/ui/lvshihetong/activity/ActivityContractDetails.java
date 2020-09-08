@@ -48,7 +48,6 @@ import com.ytfu.lawyercircle.ui.pay.bean.PayBean;
 import com.ytfu.lawyercircle.ui.pay.bean.WxPayBean;
 import com.ytfu.lawyercircle.utils.CommonUtil;
 import com.ytfu.lawyercircle.utils.DensityUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.MessageEvent;
 import com.ytfu.lawyercircle.utils.SnackbarUtils;
 import com.ytfu.lawyercircle.utils.SpUtil;
@@ -130,15 +129,14 @@ public class ActivityContractDetails
 
     @Override
     public void init() {
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, Color.WHITE);
+        changeStatusBarTextColor(true);
     }
 
     @Override
     protected void initView() {
         //        hideLoading();
         EventBus.getDefault().register(this);
-        StatusBarCompat.setStatusBarColor(this, Color.WHITE);
-        changeStatusBarTextColor(true);
         setToolbarLeftImage(R.drawable.fanhui_hui, view -> onBackPressed());
         setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         setToolbarText(R.id.tv_global_title, "合同详情");
@@ -218,7 +216,7 @@ public class ActivityContractDetails
                         simplePagerTitleView.setText(indicatorList.get(i));
                         simplePagerTitleView.setTextSize(13);
                         simplePagerTitleView.setSelectedColor(
-                                getResources().getColor(R.color.textColor_collect_audio_Select));
+                                getResources().getColor(R.color.textColor_F8203A));
                         simplePagerTitleView.setNormalColor(
                                 getResources().getColor(R.color.textColor_Details_Unselect));
                         simplePagerTitleView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
@@ -236,8 +234,7 @@ public class ActivityContractDetails
                     public IPagerIndicator getIndicator(Context context) {
                         LinePagerIndicator indicator = new LinePagerIndicator(context);
                         indicator.setMode(LinePagerIndicator.MODE_EXACTLY);
-                        indicator.setColors(
-                                getResources().getColor(R.color.textColor_collect_audio_Select));
+                        indicator.setColors(getResources().getColor(R.color.textColor_F8203A));
                         indicator.setLineWidth(DensityUtil.dip2px(43));
                         indicator.setLineHeight(DensityUtil.dip2px(1));
                         indicator.setRoundRadius(DensityUtil.dip2px(1));

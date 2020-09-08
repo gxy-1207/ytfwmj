@@ -6,7 +6,9 @@
     android:background="#f2f2f2"
     android:orientation="vertical">
 
-    <include layout="@layout/incld_title_center" />
+    <include
+        layout="@layout/incld_title_center"
+        android:visibility="gone" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -45,8 +47,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:scaleType="fitXY"
-                    />
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:id="@+id/tv_mianguanzhao"
@@ -190,6 +191,7 @@
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
                 android:orientation="vertical">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_zhiyeyear"
                     android:layout_width="match_parent"
@@ -225,6 +227,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:background="#f2f2f2" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_zhiyejigou"
                     android:layout_width="match_parent"
@@ -473,6 +476,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_niadubeian" />
+
                     <LinearLayout
                         android:id="@+id/ll_niandubeian_add"
                         android:layout_width="wrap_content"
@@ -481,14 +485,14 @@
                         app:layout_constraintLeft_toLeftOf="@+id/iv_niadubeian"
                         app:layout_constraintRight_toRightOf="@+id/iv_niadubeian"
                         app:layout_constraintTop_toTopOf="@+id/iv_niadubeian"
-                        android:layout_marginTop="20dp"
-                        >
+                        android:layout_marginTop="20dp">
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/add"
-                            android:layout_gravity="center_horizontal"
-                            />
+                            android:layout_gravity="center_horizontal" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -496,8 +500,7 @@
                             android:textColor="#ffffff"
                             android:textSize="12sp"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="7dp"
-                            />
+                            android:layout_marginTop="7dp" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
@@ -517,6 +520,7 @@
                 android:layout_height="146dp"
                 android:background="#ffffff"
                 android:orientation="horizontal">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_shefenzheng_zhengmian"
                     android:layout_width="wrap_content"
@@ -545,6 +549,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_shefenzheng_zhengmian" />
+
                     <LinearLayout
                         android:id="@+id/ll_shefenzheng_zhengmian_add"
                         android:layout_width="wrap_content"
@@ -553,14 +558,14 @@
                         app:layout_constraintLeft_toLeftOf="@+id/iv_shefenzheng_zhengmian"
                         app:layout_constraintRight_toRightOf="@+id/iv_shefenzheng_zhengmian"
                         app:layout_constraintTop_toTopOf="@+id/iv_shefenzheng_zhengmian"
-                        android:layout_marginTop="20dp"
-                        >
+                        android:layout_marginTop="20dp">
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/add"
-                            android:layout_gravity="center_horizontal"
-                            />
+                            android:layout_gravity="center_horizontal" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -568,10 +573,10 @@
                             android:textColor="#ffffff"
                             android:textSize="12sp"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="7dp"
-                            />
+                            android:layout_marginTop="7dp" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_shefenzheng_fanmian"
                     android:layout_width="wrap_content"
@@ -600,6 +605,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_shefenzheng_fanmian" />
+
                     <LinearLayout
                         android:id="@+id/ll_shefenzheng_fanmian_add"
                         android:layout_width="wrap_content"
@@ -608,14 +614,14 @@
                         app:layout_constraintLeft_toLeftOf="@+id/iv_shefenzheng_fanmian"
                         app:layout_constraintRight_toRightOf="@+id/iv_shefenzheng_fanmian"
                         app:layout_constraintTop_toTopOf="@+id/iv_shefenzheng_fanmian"
-                        android:layout_marginTop="20dp"
-                        >
+                        android:layout_marginTop="20dp">
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/add"
-                            android:layout_gravity="center_horizontal"
-                            />
+                            android:layout_gravity="center_horizontal" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -623,8 +629,7 @@
                             android:textColor="#ffffff"
                             android:textSize="12sp"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="7dp"
-                            />
+                            android:layout_marginTop="7dp" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>

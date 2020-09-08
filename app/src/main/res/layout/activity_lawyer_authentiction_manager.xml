@@ -8,11 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <include layout="@layout/incld_title_center" />
+
+        <include
+            layout="@layout/incld_title_center"
+            android:visibility="gone" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="124dp"
-            android:background="#4C98EE" />
+            android:background="@color/textColor_F8203A" />
     </LinearLayout>
 
     <RelativeLayout
@@ -30,9 +34,9 @@
             android:layout_height="60dp"
             android:layout_marginLeft="19dp"
             android:layout_marginTop="28dp"
-            android:src="@drawable/logo"
-            android:scaleType="fitXY"
-            />
+            android:src="@mipmap/mj_icon_app_logo"
+            android:scaleType="fitXY" />
+
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
@@ -43,8 +47,8 @@
             android:layout_toRightOf="@+id/iv_lvshi_header"
             android:layout_alignTop="@+id/iv_lvshi_header"
             android:layout_marginTop="8dp"
-            android:layout_marginLeft="15dp"
-            />
+            android:layout_marginLeft="15dp" />
+
         <TextView
             android:id="@+id/tv_shen_id"
             android:layout_width="wrap_content"
@@ -54,41 +58,41 @@
             android:textSize="13sp"
             android:layout_toRightOf="@+id/iv_lvshi_header"
             android:layout_alignBottom="@+id/iv_lvshi_header"
-            android:layout_marginLeft="15dp"
-            />
+            android:layout_marginLeft="15dp" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:src="@drawable/shimingrenzhenglvse"
-           android:layout_marginRight="15dp"
-            android:layout_marginTop="20dp"
-            />
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_lvshi_header"
             android:layout_marginLeft="19dp"
             android:layout_marginTop="19dp"
-            android:layout_marginBottom="30dp"
-            >
+            android:layout_marginBottom="30dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
                 android:textColor="#494949"
-                android:text="律师个人信息安全保障中"
-                />
+                android:text="律师个人信息安全保障中" />
+
             <TextView
                 android:id="@+id/tv_lvshi_xy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
                 android:textColor="#4C98EE"
-                android:text="《隐私保障协议》"
-                />
+                android:text="《隐私保障协议》" />
         </LinearLayout>
     </RelativeLayout>
+
     <TextView
         android:id="@+id/tv_lvshi_xinxi"
         android:layout_width="match_parent"
@@ -101,6 +105,5 @@
         android:textColor="#494949"
         android:textSize="13sp"
         android:layout_marginRight="15dp"
-        android:layout_marginLeft="22dp"
-        />
+        android:layout_marginLeft="22dp" />
 </RelativeLayout>

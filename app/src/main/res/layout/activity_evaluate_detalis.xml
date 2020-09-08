@@ -3,9 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<include
-    layout="@layout/incld_title_center"
-    />
+
+    <include
+        layout="@layout/incld_title_center"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +25,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/logo" />
+                android:src="@mipmap/mj_icon_app_logo" />
 
             <TextView
                 android:id="@+id/tv_name"
@@ -70,11 +72,12 @@
             android:textColor="#E13B38"
             android:textSize="13sp" />
     </LinearLayout>
-<View
-    android:layout_width="match_parent"
-    android:layout_height="7.5dp"
-    android:background="#F6F6F6"
-    />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="7.5dp"
+        android:background="#F6F6F6" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

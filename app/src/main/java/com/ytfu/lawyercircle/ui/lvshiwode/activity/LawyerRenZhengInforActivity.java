@@ -30,6 +30,7 @@ import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.contrarywind.listener.OnItemSelectedListener;
 import com.contrarywind.view.WheelView;
+import com.github.lee.annotation.InjectLayout;
 import com.orhanobut.logger.Logger;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
@@ -50,8 +51,6 @@ import com.ytfu.lawyercircle.ui.mine.activity.ActivityLvShiRenZhengSetName;
 import com.ytfu.lawyercircle.ui.mine.activity.ActivityShangChangLingYu;
 import com.ytfu.lawyercircle.ui.mine.activity.ActivityZhiYeJiGou;
 import com.ytfu.lawyercircle.utils.AndPermissionUtil;
-import com.ytfu.lawyercircle.utils.CommonUtil;
-import com.ytfu.lawyercircle.utils.Eyes;
 import com.ytfu.lawyercircle.utils.GlideManager;
 import com.ytfu.lawyercircle.utils.MessageEvent;
 import com.ytfu.lawyercircle.utils.SpUtil;
@@ -74,10 +73,14 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import qiu.niorgai.StatusBarCompat;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
 /** @Auther gxy @Date 2020/5/28 @Des 律师认证信息 */
+@InjectLayout(
+        value = R.layout.activity_lvshirenzheng_infor,
+        toolbarLayoutId = R.layout.layout_toolbar_center_title)
 public class LawyerRenZhengInforActivity
         extends BaseActivity<ILwayerInforView, LawyerInforPresenter> implements ILwayerInforView {
     private static final String TAG = "ActivityLvShiRenZheng";
@@ -228,10 +231,10 @@ public class LawyerRenZhengInforActivity
     private String year;
     private LawyerInformationBean.InfoBean info;
 
-    @Override
-    protected int provideContentViewId() {
-        return R.layout.activity_lvshirenzheng_infor;
-    }
+    //    @Override
+    //    protected int provideContentViewId() {
+    //        return R.layout.activity_lvshirenzheng_infor;
+    //    }
 
     @Override
     protected LawyerInforPresenter createPresenter() {
@@ -246,7 +249,9 @@ public class LawyerRenZhengInforActivity
     @Override
     public void init() {
         super.init();
-        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        //        Eyes.setStatusBarColor(this, CommonUtil.getColor(R.color.transparent_4c));
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
     }
 
     public static void start(Context context) {
@@ -257,13 +262,16 @@ public class LawyerRenZhengInforActivity
     @Override
     protected void initView() {
         hideLoading();
-
+        //        tvTopTitle.setText("律师认证信息");
+        setToolbarBackgroud(getResources().getColor(R.color.white));
+        setToolbarLeftImage(R.drawable.fanhui_hui, view -> onBackPressed());
+        setToolbarText(R.id.tv_global_title, "律师认证信息");
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             builder.detectFileUriExposure();
         }
-        tvTopTitle.setText("律师认证信息");
         EventBus.getDefault().register(this);
     }
 

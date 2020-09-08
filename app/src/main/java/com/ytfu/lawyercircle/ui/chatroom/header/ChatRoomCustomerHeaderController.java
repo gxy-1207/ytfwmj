@@ -19,7 +19,8 @@ import com.ytfu.lawyercircle.utils.view.RatioImageView;
 
 import java.util.List;
 
-public class ChatRoomCustomerHeaderController extends BaseHeaderController<List<ZiXunSendMessageBean.ListBean>> {
+public class ChatRoomCustomerHeaderController
+        extends BaseHeaderController<List<ZiXunSendMessageBean.ListBean>> {
 
     public ChatRoomCustomerHeaderController(Context mContext) {
         super(mContext);
@@ -28,7 +29,6 @@ public class ChatRoomCustomerHeaderController extends BaseHeaderController<List<
     @Override
     protected View onCreateHeaderView() {
         return inflateView(R.layout.header_room_lawyer_customer);
-
     }
 
     @Override
@@ -39,45 +39,47 @@ public class ChatRoomCustomerHeaderController extends BaseHeaderController<List<
         for (ZiXunSendMessageBean.ListBean item : data) {
             View itemView = inflateView(R.layout.item_header_room_lawyer_customer);
             RatioImageView ivPic = itemView.findViewById(R.id.rv_item_header_pic);
-            RequestOptions options = new RequestOptions()
-                    .placeholder(R.drawable.icon_seat)
-                    .error(R.drawable.icon_seat)
-                    // 设置缓存
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+            RequestOptions options =
+                    new RequestOptions()
+                            .placeholder(R.drawable.icon_seat)
+                            .error(R.drawable.icon_seat)
+                            // 设置缓存
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
 
-            Glide.with(mContext)
-                    .load(item.getImgurl())
-                    .apply(options)
-                    .into(ivPic);
+            Glide.with(mContext).load(item.getImgurl()).apply(options).into(ivPic);
             TextView tvTitle = itemView.findViewById(R.id.tv_item_header_title);
             tvTitle.setText(item.getTitle());
 
             TextView tvDesc = itemView.findViewById(R.id.tv_item_header_desc);
             tvDesc.setText(item.getContent());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int type = item.getType();
-                    String url = item.getUrl();
-                    switch (type) {
-                        case 1:
-                            mContext.startActivity(new Intent(mContext, ActivityQiSuZhuang.class));
-                            break;
-                        case 2:
-                            if (!TextUtils.isEmpty(url)) {
-                                Intent intent = new Intent(mContext, FwhMessageDetailsActivity.class);
-                                intent.putExtra("url", url);
-                                mContext.startActivity(intent);
+            itemView.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int type = item.getType();
+                            String url = item.getUrl();
+                            String title = item.getTitle();
+                            switch (type) {
+                                case 1:
+                                    mContext.startActivity(
+                                            new Intent(mContext, ActivityQiSuZhuang.class));
+                                    break;
+                                case 2:
+                                    if (!TextUtils.isEmpty(url)) {
+                                        Intent intent =
+                                                new Intent(
+                                                        mContext, FwhMessageDetailsActivity.class);
+                                        intent.putExtra("url", url);
+                                        intent.putExtra("title", title);
+                                        mContext.startActivity(intent);
+                                    }
+                                    break;
                             }
-                            break;
-                    }
-                }
-            });
+                        }
+                    });
 
             ll.addView(itemView);
         }
-
-
     }
 }
