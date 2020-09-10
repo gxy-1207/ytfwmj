@@ -139,13 +139,15 @@ public class SplashActivity extends BaseActivity<BaseView, BasePresenter<BaseVie
         // 用户协议
         tv_yhxy.setOnClickListener(
                 v -> {
-                    String fuwuUrl = "http://www.yuntaifawu.com/index/xieyi";
+                    //                    String fuwuUrl = "http://www.yuntaifawu.com/index/xieyi";
+                    String fuwuUrl = BuildConfig.BASIC_URL + "index/xieyi";
                     PrivacyAgreementActivity.Companion.start(this, "用户服务协议", fuwuUrl);
                 });
         // 隐私协议
         tv_yisi.setOnClickListener(
                 v -> {
-                    String yinsiUrl = "http://www.yuntaifawu.com/index/yinsi";
+                    //                    String yinsiUrl = "http://www.yuntaifawu.com/index/yinsi";
+                    String yinsiUrl = BuildConfig.BASIC_URL + "index/yinsi";
                     PrivacyAgreementActivity.Companion.start(this, "隐私协议", yinsiUrl);
                 });
         // 取消

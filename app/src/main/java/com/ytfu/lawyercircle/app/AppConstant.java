@@ -11,8 +11,8 @@ public class AppConstant {
     public static final String UMENG_KEY = "5de76139570df34a4d000b8f";
     /** bugly */
     public static final String BUGLY_ID = "6bbc6d272c";
-    /** 微信APP_ID wxfc703d618ab01bad */
-    public static final String WX_APP_ID = "wxfc703d618ab01bad";
+    /** 微信appid wx42a52e8676f8fe4b */
+    public static final String WX_APP_ID = "wx42a52e8676f8fe4b";
     /** Logger tag */
     public static final String LOGGER_TAG = "logger_ytfw";
     /** 成功 */

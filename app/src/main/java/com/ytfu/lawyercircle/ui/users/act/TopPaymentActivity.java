@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import qiu.niorgai.StatusBarCompat;
 
 /** @Auther gxy @Date 2020/6/12 @Des 置顶支付 */
 @InjectLayout(
@@ -81,13 +82,16 @@ public class TopPaymentActivity extends BaseActivity<TopPaymentView, TopPaymentP
     @Override
     protected void initData() {
         super.initData();
-        changeStatusBarTextColor(false);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
+        setToolbarBackgroud(getResources().getColor(R.color.white));
         setToolbarLeftImage(
-                R.drawable.fanhui_bai,
+                R.drawable.fanhui_hui,
                 v -> {
                     onBackPressed();
                 });
         setToolbarText(R.id.tv_global_title, "置顶支付");
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         // 获取置顶金额
         getPresenter().getPublicPrice();
     }

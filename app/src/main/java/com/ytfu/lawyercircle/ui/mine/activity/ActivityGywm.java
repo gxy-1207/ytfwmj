@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ytfu.lawyercircle.BuildConfig;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.base.BaseActivity;
 import com.ytfu.lawyercircle.base.BasePresenter;
@@ -74,12 +75,15 @@ public class ActivityGywm extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_yhxy:
-                String fuwuUrl = "http://www.yuntaifawu.com/index/xieyi";
+                //                String fuwuUrl = "http://www.yuntaifawu.com/index/xieyi";
+                // http://majia.yuntaifawu.com/
+                String fuwuUrl = BuildConfig.BASIC_URL + "index/xieyi";
                 PrivacyAgreementActivity.Companion.start(this, "用户服务协议", fuwuUrl);
                 //                startActivity(new Intent(ActivityGywm.this, ActivityYhxy.class));
                 break;
             case R.id.tv_yisi:
-                String yinsiUrl = "http://www.yuntaifawu.com/index/yinsi";
+                //                String yinsiUrl = "http://www.yuntaifawu.com/index/yinsi";
+                String yinsiUrl = BuildConfig.BASIC_URL + "index/yinsi";
                 PrivacyAgreementActivity.Companion.start(this, "隐私协议", yinsiUrl);
                 //                startActivity(new Intent(ActivityGywm.this, ActivityYs.class));
                 break;

@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--忘记密码-->
+<?xml version="1.0" encoding="utf-8"?><!--忘记密码-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    >
+    android:background="#ffffff">
+
     <LinearLayout
         android:id="@+id/ll_title"
         android:layout_width="match_parent"
@@ -27,7 +26,7 @@
         android:layout_below="@+id/ll_title"
         android:layout_marginLeft="38dp"
         android:layout_marginTop="80dp"
-        android:background="#44A2F7" />
+        android:background="#F8203A" />
 
     <TextView
         android:id="@+id/text_login"
@@ -40,6 +39,7 @@
         android:textColor="#343434"
         android:textSize="28dp"
         android:textStyle="bold" />
+
     <EditText
         android:id="@+id/et_name"
         android:layout_width="match_parent"
@@ -54,6 +54,7 @@
         android:maxLength="11"
         android:textColor="#666666"
         android:textSize="15sp" />
+
     <View
         android:id="@+id/view_wangji_name"
         android:layout_width="match_parent"
@@ -63,6 +64,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginRight="37dp"
         android:background="#EBEBEB" />
+
     <LinearLayout
         android:id="@+id/ll_wangji_code"
         android:layout_width="match_parent"
@@ -95,7 +97,7 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="获取验证码"
-            android:textColor="#44a2f7"
+            android:textColor="@color/textColor_F8203A"
             android:textSize="10sp" />
     </LinearLayout>
 
@@ -108,6 +110,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginRight="37dp"
         android:background="#EBEBEB" />
+
     <RelativeLayout
         android:id="@+id/rl_shuru_pws"
         android:layout_width="match_parent"
@@ -115,8 +118,7 @@
         android:layout_marginTop="31dp"
         android:layout_below="@+id/view_wangji_code"
         android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        >
+        android:layout_marginRight="40dp">
 
         <EditText
             android:id="@+id/et_new_pwd"
@@ -128,8 +130,7 @@
             android:inputType="textPassword"
             android:hint="新密码"
             android:maxLength="12"
-            android:textColor="#666666"
-            />
+            android:textColor="#666666" />
 
         <ImageView
             android:id="@+id/iv_bi"
@@ -137,9 +138,9 @@
             android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_margin="10dp"
-            android:src="@drawable/xiaoyanjingbi"
-            />
+            android:src="@drawable/xiaoyanjingbi" />
     </RelativeLayout>
+
     <View
         android:id="@+id/view_wangji_pwd"
         android:layout_width="match_parent"
@@ -148,8 +149,8 @@
         android:layout_alignLeft="@id/rl_shuru_pws"
         android:layout_alignRight="@id/rl_shuru_pws"
         android:layout_marginTop="15dp"
-        android:background="#EBEBEB"
-        />
+        android:background="#EBEBEB" />
+
     <RelativeLayout
         android:id="@+id/rl_queren_pws"
         android:layout_width="match_parent"
@@ -157,8 +158,7 @@
         android:layout_marginTop="31dp"
         android:layout_below="@+id/view_wangji_pwd"
         android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        >
+        android:layout_marginRight="40dp">
 
         <EditText
             android:id="@+id/et_queren_pwd"
@@ -170,8 +170,7 @@
             android:inputType="textPassword"
             android:hint="确认密码"
             android:maxLength="12"
-            android:textColor="#666666"
-            />
+            android:textColor="#666666" />
 
         <ImageView
             android:id="@+id/im_queren_pwd"
@@ -179,9 +178,9 @@
             android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_margin="10dp"
-            android:src="@drawable/xiaoyanjingbi"
-            />
+            android:src="@drawable/xiaoyanjingbi" />
     </RelativeLayout>
+
     <View
         android:id="@+id/view_queren_pwd"
         android:layout_width="match_parent"
@@ -190,19 +189,18 @@
         android:layout_alignLeft="@id/rl_queren_pws"
         android:layout_alignRight="@id/rl_queren_pws"
         android:layout_marginTop="15dp"
-        android:background="#EBEBEB"
-        />
+        android:background="#EBEBEB" />
+
     <Button
         android:id="@+id/btn_queren"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/view_queren_pwd"
         android:layout_marginTop="64dp"
-        android:background="@drawable/denglu"
+        android:background="@drawable/btn_login_shape"
         android:layout_alignLeft="@id/rl_queren_pws"
         android:layout_alignRight="@id/rl_queren_pws"
         android:textSize="15sp"
         android:text="确认"
-        android:textColor="#FFFFFF"
-        />
+        android:textColor="#FFFFFF" />
 </RelativeLayout>

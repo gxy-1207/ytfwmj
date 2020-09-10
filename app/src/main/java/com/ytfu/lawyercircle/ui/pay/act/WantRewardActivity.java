@@ -211,10 +211,12 @@ public class WantRewardActivity extends BaseActivity<PayView, PayPresenter> impl
     protected void initData() {
         super.initData();
         hideLoading();
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.transparent_4c));
-        setToolbarLeftImage(R.drawable.fanhui_bai, v -> onBackPressed());
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        changeStatusBarTextColor(true);
+        setToolbarBackgroud(getResources().getColor(R.color.white));
+        setToolbarLeftImage(R.drawable.fanhui_hui, v -> onBackPressed());
         setToolbarText(R.id.tv_global_title, "我要悬赏");
-
+        setToolbarTextColor(R.id.tv_global_title, getResources().getColor(R.color.textColor_33));
         rv_advisory_money.setLayoutManager(new GridLayoutManager(mContext, 3));
         rv_advisory_money.setAdapter(adapter);
         List<Integer> reward6 = PayPresenter.getReward6();

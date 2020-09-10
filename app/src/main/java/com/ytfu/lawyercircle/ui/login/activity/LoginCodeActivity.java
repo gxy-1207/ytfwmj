@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.ytfu.lawyercircle.BuildConfig;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.App;
 import com.ytfu.lawyercircle.app.AppConstant;
@@ -180,13 +181,15 @@ public class LoginCodeActivity extends BaseActivity<ICodeView, CodePresent>
                 wxLogin();
                 break;
             case R.id.tv_yhxy:
-                String fuwuUrl = "http://www.yuntaifawu.com/index/xieyi";
+                //                String fuwuUrl = "http://www.yuntaifawu.com/index/xieyi";
+                String fuwuUrl = BuildConfig.BASIC_URL + "index/xieyi";
                 PrivacyAgreementActivity.Companion.start(this, "用户服务协议", fuwuUrl);
                 //                startActivity(new Intent(LoginCodeActivity.this,
                 // ActivityYhxy.class));
                 break;
             case R.id.tv_ys:
-                String yinsiUrl = "http://www.yuntaifawu.com/index/yinsi";
+                //                String yinsiUrl = "http://www.yuntaifawu.com/index/yinsi";
+                String yinsiUrl = BuildConfig.BASIC_URL + "index/yinsi";
                 PrivacyAgreementActivity.Companion.start(this, "隐私协议", yinsiUrl);
                 //                startActivity(new Intent(LoginCodeActivity.this,
                 // ActivityYs.class));

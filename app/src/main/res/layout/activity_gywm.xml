@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffffff"
-    >
+    android:background="#ffffff">
+
     <include layout="@layout/incled_title_bai_center" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -18,14 +18,14 @@
             android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="77dp"
-            android:src="@mipmap/icon_app_logo" />
+            android:src="@mipmap/mj_app_logo" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:text="云台法律咨询"
+            android:text="律师圈法律咨询"
             android:textColor="#333333"
             android:textSize="17sp" />
 
@@ -51,8 +51,9 @@
 数千份律师精修合同，满足您的需求，保障公司权益。"
             android:textColor="#333333"
             android:textSize="12sp" />
-            />
+        />
     </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,15 +61,16 @@
         android:text="客服热线 :   010-57157966"
         android:layout_marginBottom="10dp"
         android:textSize="13sp"
-        android:textColor="#e13b38"/>
+        android:textColor="#e13b38" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_marginBottom="10dp"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
+
         <TextView
             android:id="@+id/tv_yhxy"
             android:layout_width="wrap_content"
@@ -77,6 +79,7 @@
             android:text="《用户服务协议》"
             android:textColor="#e13b38"
             android:textSize="12sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,6 +87,7 @@
             android:text="和"
             android:textColor="#333333"
             android:textSize="12sp" />
+
         <TextView
             android:id="@+id/tv_yisi"
             android:layout_width="wrap_content"
@@ -93,22 +97,22 @@
             android:textColor="#e13b38"
             android:textSize="12sp" />
     </LinearLayout>
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="北京云台法律咨询服务有限公司所有"
-    android:textSize="10sp"
-    android:textColor="#666666"
-    android:layout_gravity="center_horizontal"
-    />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       android:layout_marginTop="10dp"
+        android:text="广渠汇金(北京)科技有限公司"
+        android:textSize="10sp"
+        android:textColor="#666666"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="32dp"
         android:text="京ICP备19031236号"
         android:textSize="10sp"
         android:textColor="#666666"
-        android:layout_gravity="center_horizontal"
-        />
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

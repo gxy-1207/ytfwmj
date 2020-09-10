@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -52,6 +53,9 @@ public class ActivitySelectIndictment extends BaseActivity<ISelectQszView, Selec
 
     @BindView(R.id.v1)
     View v1;
+
+    @BindView(R.id.ll_empty)
+    LinearLayout ll_empty;
 
     private String uid;
     private SelectZhuShouAdaper zhuShouAdaper;
@@ -173,8 +177,16 @@ public class ActivitySelectIndictment extends BaseActivity<ISelectQszView, Selec
         if (zhuShouBean == null
                 || zhuShouBean.getList() == null
                 || zhuShouBean.getList().isEmpty()) {
-            showEmpty();
+            //            showEmpty();
+            ll_empty.setVisibility(View.VISIBLE);
+            recycleSelectQsz.setVisibility(View.GONE);
+            v1.setVisibility(View.GONE);
+            btnAddKtzs.setVisibility(View.GONE);
         } else {
+            ll_empty.setVisibility(View.GONE);
+            recycleSelectQsz.setVisibility(View.VISIBLE);
+            v1.setVisibility(View.VISIBLE);
+            btnAddKtzs.setVisibility(View.VISIBLE);
             list = zhuShouBean.getList();
             zhuShouAdaper.setmList(zhuShouBean.getList());
         }

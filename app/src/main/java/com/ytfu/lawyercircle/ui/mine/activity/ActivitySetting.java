@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.ytfu.lawyercircle.BuildConfig;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.base.BaseActivity;
 import com.ytfu.lawyercircle.base.BasePresenter;
@@ -111,13 +112,15 @@ public class ActivitySetting extends BaseActivity {
                 startActivity(new Intent(ActivitySetting.this, ActivityGywm.class));
                 break;
             case R.id.cl_yhfwxy:
-                String fuwuUrl = "http://www.yuntaifawu.com/index/xieyi";
+                //                String fuwuUrl = "http://www.yuntaifawu.com/index/xieyi";
+                String fuwuUrl = BuildConfig.BASIC_URL + "index/xieyi";
                 PrivacyAgreementActivity.Companion.start(this, "用户服务协议", fuwuUrl);
                 //                startActivity(new Intent(ActivitySetting.this,
                 // ActivityYhxy.class));
                 break;
             case R.id.cl_ysxy:
-                String yinsiUrl = "http://www.yuntaifawu.com/index/yinsi";
+                //                String yinsiUrl = "http://www.yuntaifawu.com/index/yinsi";
+                String yinsiUrl = BuildConfig.BASIC_URL + "index/yinsi";
                 PrivacyAgreementActivity.Companion.start(this, "隐私协议", yinsiUrl);
                 //                startActivity(new Intent(ActivitySetting.this, ActivityYs.class));
                 break;
