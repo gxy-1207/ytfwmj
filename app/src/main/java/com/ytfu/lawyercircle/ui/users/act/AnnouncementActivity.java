@@ -26,7 +26,7 @@ public class AnnouncementActivity extends BaseActivity {
         super.initData();
         hideLoading();
         StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
-        changeStatusBarTextColor(false);
+        changeStatusBarTextColor(true);
         setToolbarBackgroud(getResources().getColor(R.color.white));
         setToolbarLeftImage(
                 R.drawable.fanhui_hui,
