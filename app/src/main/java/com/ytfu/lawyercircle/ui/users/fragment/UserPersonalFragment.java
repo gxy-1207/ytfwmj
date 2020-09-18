@@ -70,6 +70,9 @@ public class UserPersonalFragment extends BaseFragment<UserPersonalView, UserPer
     @BindView(R.id.tv_personal_refund)
     TextView tv_personal_refund;
 
+    @BindView(R.id.red_dot)
+    ImageView red_dot;
+
     public static UserPersonalFragment newInstance() {
         return new UserPersonalFragment();
     }
@@ -147,7 +150,7 @@ public class UserPersonalFragment extends BaseFragment<UserPersonalView, UserPer
                         });
 
         // 公告
-        rootView.findViewById(R.id.tv_personal_announcement)
+        rootView.findViewById(R.id.rl_personal_announcement)
                 .setOnClickListener(v -> AnnouncementActivity.start(mContext));
         // 设置
         rootView.findViewById(R.id.tv_personal_setting)
@@ -210,6 +213,12 @@ public class UserPersonalFragment extends BaseFragment<UserPersonalView, UserPer
         //                .into(iv_personal_avatar);
         tv_personal_name.setText(bean.getUser_login());
         tv_personal_balance.setText(bean.getIncome());
+        // 是否有新公告
+        if (bean.getRand_type() == 1) {
+            red_dot.setVisibility(View.VISIBLE);
+        } else {
+            red_dot.setVisibility(View.GONE);
+        }
     }
 
     @Override

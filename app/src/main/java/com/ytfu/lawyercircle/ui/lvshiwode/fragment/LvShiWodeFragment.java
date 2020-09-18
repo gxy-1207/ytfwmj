@@ -31,9 +31,10 @@ import com.ytfu.lawyercircle.ui.lvshiwode.view.LawyerPersonalView;
 import com.ytfu.lawyercircle.ui.mine.activity.ActivityMineCollection;
 import com.ytfu.lawyercircle.ui.mine.bean.MineBean;
 import com.ytfu.lawyercircle.ui.users.act.AnnouncementActivity;
-import com.ytfu.lawyercircle.ui.users.act.AnnouncementDetailsActivity;
+import com.ytfu.lawyercircle.ui.users.act.SkillsActivityList;
 import com.ytfu.lawyercircle.utils.SpUtil;
 
+import java.util.Objects;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -55,6 +56,12 @@ public class LvShiWodeFragment extends BaseFragment<LawyerPersonalView, LawyerPe
 
     @BindView(R.id.srl_personal_refresh)
     SwipeRefreshLayout srl_personal_refresh;
+
+    @BindView(R.id.red_dot)
+    ImageView red_dot;
+
+    @BindView(R.id.red_dot_skills)
+    ImageView red_dot_skills;
     //    private String uid;
     // ===Desc:=================================================================
 
@@ -108,7 +115,7 @@ public class LvShiWodeFragment extends BaseFragment<LawyerPersonalView, LawyerPe
                             getPresenter().getQuestionInfo(lawyerId);
                         });
         // 公告
-        rootView.findViewById(R.id.tv_lawyer_post)
+        rootView.findViewById(R.id.rl_lawyer_post)
                 .setOnClickListener(
                         v -> {
                             AnnouncementActivity.start(mContext);
@@ -121,12 +128,24 @@ public class LvShiWodeFragment extends BaseFragment<LawyerPersonalView, LawyerPe
                             ManagementCommonWordsActivity2.start(getActivity());
                         });
         // 使用技巧
-        rootView.findViewById(R.id.tv_use_skills)
+        rootView.findViewById(R.id.rl_use_skills)
                 .setOnClickListener(
                         view -> {
-                            String skillUrl = "http://yuntaifawu.com/portal/index/shiyongjiqiao";
-                            AnnouncementDetailsActivity.start(getActivity(), "使用技巧", skillUrl);
+                            //                            String skillUrl =
+                            // "http://yuntaifawu.com/portal/index/shiyongjiqiao";
+                            //
+                            // AnnouncementDetailsActivity.start(getActivity(), "使用技巧", skillUrl);
+                            SkillsActivityList.Companion.start(
+                                    Objects.requireNonNull(getActivity()));
                         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // 请求数据
+        String uid = SpUtil.getString(mContext, AppConstant.UID, "");
+        getPresenter().requestPersonal(uid);
     }
 
     @Override
@@ -187,7 +206,18 @@ public class LvShiWodeFragment extends BaseFragment<LawyerPersonalView, LawyerPe
                         .fallback(R.drawable.touxiang) // url为空的时候,显示的图片
                         .error(R.drawable.touxiang); // 图片加载失败后，显示的图片
         Glide.with(this).load(bean.getAvatar()).apply(options).into(iv_personal_avatar);
-
+        // 公告是否有新消息
+        if (bean.getRand_type() == 1) {
+            red_dot.setVisibility(View.VISIBLE);
+        } else {
+            red_dot.setVisibility(View.GONE);
+        }
+        // 使用技巧是否有新消息
+        if (bean.getJiqiao_type() == 1) {
+            red_dot_skills.setVisibility(View.VISIBLE);
+        } else {
+            red_dot_skills.setVisibility(View.GONE);
+        }
         srl_personal_refresh.setRefreshing(false);
         hideLoading();
     }

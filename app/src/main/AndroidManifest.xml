@@ -673,6 +673,7 @@
             android:name="com.ytfu.lawyercircle.ui.TipLoginActivity"
             android:theme="@style/TokenInvalidDialog" />
         <activity android:name="com.ytfu.lawyercircle.ui.register.activity.PrivacyAgreementActivity" />
+        <activity android:name=".ui.users.act.SkillsActivityList" />
 
         <!--service-->
         <service

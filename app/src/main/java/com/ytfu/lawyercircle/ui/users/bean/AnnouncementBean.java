@@ -2,24 +2,15 @@ package com.ytfu.lawyercircle.ui.users.bean;
 
 import java.util.List;
 
-/**
-*
-*  @Auther  gxy
-*
-*  @Date    2020/6/12
-*
-*  @Des 公告bean
-*
-*/
+/** @Auther gxy @Date 2020/6/12 @Des 公告bean */
 public class AnnouncementBean {
 
     /**
-     * code : 200
-     * msg : 查询成功
-     * data : [{"id":"7","title":"周末放假啊啊啊","addtime":"2020-06-12 13:25:00","istop":"1","jumpurl":"http://yuntaifawu.com/Notice/Notice?id=7"}]
+     * code : 200 msg : 查询成功 data : [{"id":"7","title":"周末放假啊啊啊","addtime":"2020-06-12
+     * 13:25:00","istop":"1","jumpurl":"http://yuntaifawu.com/Notice/Notice?id=7"}]
      */
-
     private int code;
+
     private String msg;
     private List<DataBean> data;
 
@@ -49,19 +40,25 @@ public class AnnouncementBean {
 
     public static class DataBean {
         /**
-         * id : 7
-         * title : 周末放假啊啊啊
-         * addtime : 2020-06-12 13:25:00
-         * istop : 1
-         * jumpurl : http://yuntaifawu.com/Notice/Notice?id=7
+         * id : 7 title : 周末放假啊啊啊 addtime : 2020-06-12 13:25:00 istop : 1 jumpurl :
+         * http://yuntaifawu.com/Notice/Notice?id=7
          */
-
         private String id;
+
         private String title;
         private String addtime;
         private String istop;
         private String jumpurl;
         private String content;
+        private int rand_type;
+
+        public int getRand_type() {
+            return rand_type;
+        }
+
+        public void setRand_type(int rand_type) {
+            this.rand_type = rand_type;
+        }
 
         public String getContent() {
             return content;
