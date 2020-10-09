@@ -8,9 +8,9 @@ public class AppConstant {
     //    public static boolean DEBUG = false;
     public static boolean DEBUG = BuildConfig.IS_DEBUG;
     /** 友盟 */
-    public static final String UMENG_KEY = "5de76139570df34a4d000b8f";
+    public static final String UMENG_KEY = "5f6ff7b6906ad81117154f01";
     /** bugly */
-    public static final String BUGLY_ID = "6bbc6d272c";
+    public static final String BUGLY_ID = "2caced5ed1";
     /** 微信appid wx42a52e8676f8fe4b */
     public static final String WX_APP_ID = "wx42a52e8676f8fe4b";
     /** Logger tag */
@@ -121,4 +121,9 @@ public class AppConstant {
 
     // 咨询列表进入会话列表页
     public static final int FRAGMENT_TYPE = 1;
+
+    public static final String USER_TOUSU_STATUS = "user_tousu_status";
+    public static final String XIAOXI_TOUSU_STATUS = "xiaoxi_tousu_status";
+    public static final String USER_KEFU_STATUS = "user_kefu_status";
+    public static final String USER_KEFU_PHONE = "user_kefu_phone";
 }

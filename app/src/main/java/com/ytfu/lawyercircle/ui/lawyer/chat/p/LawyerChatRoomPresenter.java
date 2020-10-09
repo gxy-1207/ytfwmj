@@ -16,6 +16,7 @@ import com.ytfu.lawyercircle.helper.BaseRxObserver;
 import com.ytfu.lawyercircle.im.EmChatManager;
 import com.ytfu.lawyercircle.ui.chatroom.bean.AddMessageResponseBean;
 import com.ytfu.lawyercircle.ui.lawyer.chat.bean.FeeResponse;
+import com.ytfu.lawyercircle.ui.lawyer.chat.bean.GetQiniuTokenBean;
 import com.ytfu.lawyercircle.ui.lawyer.chat.bean.HistoryChatBodyBean;
 import com.ytfu.lawyercircle.ui.lawyer.chat.bean.HistoryChatExtBean;
 import com.ytfu.lawyercircle.ui.lawyer.chat.bean.HistoryChatItemBean;
@@ -33,14 +34,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * 律师端聊天界面业务层实现
- */
-public class LawyerChatRoomPresenter extends BasePresenter<LawyerChatRoomView> implements EMMessageListener {
+/** 律师端聊天界面业务层实现 */
+public class LawyerChatRoomPresenter extends BasePresenter<LawyerChatRoomView>
+        implements EMMessageListener {
 
-    /**
-     * 发送按钮发送消息给对方
-     */
+    /** 发送按钮发送消息给对方 */
     public void sendTextMessage(String selfId, String toUserId, String content) {
         EMMessage message = EmChatManager.getInstance().createTxtMessage(toUserId, content);
         HistoryChatItemBean itemBean = new HistoryChatItemBean();
@@ -63,29 +61,76 @@ public class LawyerChatRoomPresenter extends BasePresenter<LawyerChatRoomView> i
 
         getView().onSendTxtPre(itemBean);
 
-        message.setMessageStatusCallback(new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                getView().onSendTxtSuccess(toUserId, selfId, itemBean);
-            }
+        message.setMessageStatusCallback(
+                new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        getView().onSendTxtSuccess(toUserId, selfId, itemBean);
+                    }
 
-            @Override
-            public void onError(int code, String errorMessage) {
-                getView().onSendTxtFail(itemBean);
-            }
+                    @Override
+                    public void onError(int code, String errorMessage) {
+                        getView().onSendTxtFail(itemBean);
+                    }
 
-            @Override
-            public void onProgress(int i, String s) {
-
-            }
-        });
-        //发送消息
+                    @Override
+                    public void onProgress(int i, String s) {}
+                });
+        // 发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
     }
+    // ===Desc:发送图片消息=================================================================
+    public void sendImgMessage(String selfId, String toUserId, String imagePath, String imageUrl) {
+        //        EMMessage imgMessage =
+        //                EmChatManager.getInstance().createImgMessage(imageUrl, false, toUserId);
+        HistoryChatItemBean itemBean = new HistoryChatItemBean();
+        try {
+            EMMessage imageSendMessage =
+                    EMMessage.createImageSendMessage(imagePath, false, toUserId);
+            if (imageSendMessage == null) {
+                return;
+            }
 
-    /**
-     * 发送收取服务费的消息
-     */
+            itemBean.setMessageId(imageSendMessage.getMsgId());
+            itemBean.setDirection(0);
+            itemBean.setFrom(selfId);
+            itemBean.setTo(toUserId);
+            itemBean.setTimestamp(System.currentTimeMillis() / 1000);
+            itemBean.setChatType(0);
+            itemBean.setStatus(2);
+            itemBean.setIsRead(0);
+            HistoryChatBodyBean body = new HistoryChatBodyBean();
+            body.setType(2);
+            body.setText(imageUrl);
+            itemBean.setBody(body);
+            HistoryChatExtBean ext = new HistoryChatExtBean();
+            itemBean.setExt(ext);
+
+            getView().onSendTxtPre(itemBean);
+            getView().onSendImgSuccess(toUserId, selfId, itemBean, imageUrl);
+            //            imageSendMessage.setMessageStatusCallback(
+            //                    new EMCallBack() {
+            //                        @Override
+            //                        public void onSuccess() {
+            //                            getView().onSendImgSuccess(toUserId, selfId, itemBean,
+            // imageUrl);
+            //                        }
+            //
+            //                        @Override
+            //                        public void onError(int code, String errorMessage) {
+            //                            getView().onSendTxtFail(itemBean);
+            //                        }
+            //
+            //                        @Override
+            //                        public void onProgress(int i, String s) {
+            //                        }
+            //                    });
+            //            EMClient.getInstance().chatManager().sendMessage(imageSendMessage);
+        } catch (Exception e) {
+            Logger.e("sendImgMessage" + e);
+        }
+    }
+    /** 发送收取服务费的消息 */
     public void sendFeeMessage(String toUserId, String selfId, String price) {
         //        EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
         HistoryChatItemBean itemBean = new HistoryChatItemBean();
@@ -109,86 +154,112 @@ public class LawyerChatRoomPresenter extends BasePresenter<LawyerChatRoomView> i
 
         itemBean.setExt(ext);
 
-        HttpUtil.getInstance().getService(TransactionService.class)
+        HttpUtil.getInstance()
+                .getService(TransactionService.class)
                 .chargeFee(toUserId, selfId, price)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(bindLifecycle())
-                .subscribe(new BaseRxObserver<FeeResponse>() {
-                    @Override
-                    public void onSubscribeImpl(Disposable d) {
-                        super.onSubscribeImpl(d);
-                        getView().showProgress();
-                        getView().onSendFeePre(itemBean);
-                    }
+                .subscribe(
+                        new BaseRxObserver<FeeResponse>() {
+                            @Override
+                            public void onSubscribeImpl(Disposable d) {
+                                super.onSubscribeImpl(d);
+                                getView().showProgress();
+                                getView().onSendFeePre(itemBean);
+                            }
 
-                    @Override
-                    public void onNextImpl(FeeResponse response) {
-                        getView().hideProgress();
-                        if (null == response) {
-                            getView().onSendFeeFail(itemBean);
-                            return;
-                        }
-                        if (response.getStatus() != 200) {
-                            getView().onSendFeeFail(itemBean);
-                            return;
-                        }
-                        getView().onSendFeeSuccess(toUserId, selfId, itemBean);
+                            @Override
+                            public void onNextImpl(FeeResponse response) {
+                                getView().hideProgress();
+                                if (null == response) {
+                                    getView().onSendFeeFail(itemBean);
+                                    return;
+                                }
+                                if (response.getStatus() != 200) {
+                                    getView().onSendFeeFail(itemBean);
+                                    return;
+                                }
+                                getView().onSendFeeSuccess(toUserId, selfId, itemBean);
+                            }
 
-                    }
-
-                    @Override
-                    public void onErrorImpl(String errorMessage) {
-                        getView().hideProgress();
-                        getView().onSendFeeFail(itemBean);
-                    }
-                });
+                            @Override
+                            public void onErrorImpl(String errorMessage) {
+                                getView().hideProgress();
+                                getView().onSendFeeFail(itemBean);
+                            }
+                        });
     }
 
-    /**
-     * 律師同步消息到服務器
-     */
-    public void lawyerSyncMessageToService(String consultId, String toUserId, String fromUserId, String content) {
-        HttpUtil.getInstance().getService2(MessageService.class)
-                .lawyerSyncMessageToService(consultId, toUserId, fromUserId, content, "2")
+    /** 律師同步消息到服務器 */
+    public void lawyerSyncMessageToService(
+            String consultId, String toUserId, String fromUserId, String content, String imageUrl) {
+        HttpUtil.getInstance()
+                .getService2(MessageService.class)
+                .lawyerSyncMessageToService(consultId, toUserId, fromUserId, content, "2", imageUrl)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(bindLifecycle())
-                .subscribe(new BaseRxObserver<AddMessageResponseBean>() {
-                    @Override
-                    public void onNextImpl(AddMessageResponseBean response) {
-                        getView().onSyncMessageSuccess();
-                    }
+                .subscribe(
+                        new BaseRxObserver<AddMessageResponseBean>() {
+                            @Override
+                            public void onNextImpl(AddMessageResponseBean response) {
+                                getView().onSyncMessageSuccess();
+                            }
 
-                    @Override
-                    public void onErrorImpl(String errorMessage) {
-                        getView().onSyncMessageFail(errorMessage);
-                    }
-                });
+                            @Override
+                            public void onErrorImpl(String errorMessage) {
+                                getView().onSyncMessageFail(errorMessage);
+                            }
+                        });
     }
+    // ===Desc:获取七牛token=================================================================
+    public void getQiNiuToken() {
+        HttpUtil.getInstance()
+                .getService(TransactionService.class)
+                .setQiNiuToken()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(
+                        new BaseRxObserver<GetQiniuTokenBean>() {
+                            @Override
+                            public void onNextImpl(GetQiniuTokenBean data) {
+                                if (data == null) {
+                                    Logger.e("获取token失败");
+                                    return;
+                                }
+                                if (data.getStatus() != 1) {
+                                    Logger.e("获取token失败");
+                                    return;
+                                }
+                                getView().onGetQiNiuToken(data);
+                            }
 
-    //===Desc:=================================================================
+                            @Override
+                            public void onErrorImpl(String errorMessage) {
+                                Logger.e(errorMessage);
+                            }
+                        });
+    }
+    // ===Desc:=================================================================
 
-    /**
-     * 注册消息接收
-     */
+    /** 注册消息接收 */
     public void registerMessageListener() {
         EmChatManager.getInstance().registerMessageListener(this);
     }
 
-    /**
-     * 注册消息接收
-     */
+    /** 注册消息接收 */
     public void unregisterMessageListener() {
         EmChatManager.getInstance().unRegisterMessageListener(this);
     }
 
-    //===Desc:环信消息监听相关=================================================================
+    // ===Desc:环信消息监听相关=================================================================
 
     @Override
     public void onMessageReceived(List<EMMessage> messages) {
-        //收到消息
-        //收到已读回执
+        // 收到消息
+        // 收到已读回执
         List<HistoryChatItemMultiItem> list = new ArrayList<>();
 
         for (EMMessage msg : messages) {
@@ -219,15 +290,14 @@ public class LawyerChatRoomPresenter extends BasePresenter<LawyerChatRoomView> i
             body.setType(1);
             body.setText(content);
             itemBean.setBody(body);
-            //接受文本
-            //msg{from:4286, to:3 body:txt:"1"
-            //ext json----->{}
-            //接受红包
-            //msg{from:4286, to:3 body:txt:"已支付律师咨询费0.01元"
-            //{"price":"0.01","jilu_id":0,"type":2,"huashu_id":"15910784817"}
+            // 接受文本
+            // msg{from:4286, to:3 body:txt:"1"
+            // ext json----->{}
+            // 接受红包
+            // msg{from:4286, to:3 body:txt:"已支付律师咨询费0.01元"
+            // {"price":"0.01","jilu_id":0,"type":2,"huashu_id":"15910784817"}
 
-
-            //获取环信消息的ext字段  转换成HistoryChatExtBean
+            // 获取环信消息的ext字段  转换成HistoryChatExtBean
             Map<String, Object> extMap = msg.ext();
             if (extMap.size() > 0) {
                 Gson gson = new Gson();
@@ -237,22 +307,20 @@ public class LawyerChatRoomPresenter extends BasePresenter<LawyerChatRoomView> i
                 itemBean.setExt(ext);
             }
 
-
             HistoryChatItemMultiItem bean = new HistoryChatItemMultiItem(itemBean);
             list.add(bean);
         }
         getView().onTextReceived(list);
-
     }
 
     @Override
     public void onCmdMessageReceived(List<EMMessage> messages) {
-        //收到透传消息
+        // 收到透传消息
     }
 
     @Override
     public void onMessageRead(List<EMMessage> messages) {
-        //收到已读回执
+        // 收到已读回执
         List<HistoryChatItemMultiItem> list = new ArrayList<>();
 
         for (EMMessage msg : messages) {
@@ -290,85 +358,86 @@ public class LawyerChatRoomPresenter extends BasePresenter<LawyerChatRoomView> i
 
     @Override
     public void onMessageDelivered(List<EMMessage> message) {
-        //收到已送达回执
+        // 收到已送达回执
     }
 
     @Override
     public void onMessageRecalled(List<EMMessage> messages) {
-        //消息被撤回
+        // 消息被撤回
     }
 
     @Override
     public void onMessageChanged(EMMessage message, Object change) {
-        //消息状态变动
+        // 消息状态变动
     }
 
-
-    //===Desc:================================================================================
+    // ===Desc:================================================================================
 
     public void getReplyContent(String userId, String cid) {
-        Observable<CommonWordsListBean> cb = createService(CommonWordsApi.class)
-                .setCommonWordList(userId, cid);
-        requestRemote(cb, new BaseRxObserver<CommonWordsListBean>() {
-            @Override
-            public void onSubscribeImpl(Disposable d) {
-                super.onSubscribeImpl(d);
-                getView().showProgress();
-            }
+        Observable<CommonWordsListBean> cb =
+                createService(CommonWordsApi.class).setCommonWordList(userId, cid);
+        requestRemote(
+                cb,
+                new BaseRxObserver<CommonWordsListBean>() {
+                    @Override
+                    public void onSubscribeImpl(Disposable d) {
+                        super.onSubscribeImpl(d);
+                        getView().showProgress();
+                    }
 
-            @Override
-            public void onNextImpl(CommonWordsListBean data) {
-                if (data == null) {
-                    getView().showToast("未知错误,请稍后重试");
-                    return;
-                }
-                if (data.getCode() != 200) {
-                    getView().showToast(data.getMsg());
-                    return;
-                }
-                getView().onGetReplyContentSuccess(data.getData());
+                    @Override
+                    public void onNextImpl(CommonWordsListBean data) {
+                        if (data == null) {
+                            getView().showToast("未知错误,请稍后重试");
+                            return;
+                        }
+                        if (data.getCode() != 200) {
+                            getView().showToast(data.getMsg());
+                            return;
+                        }
+                        getView().onGetReplyContentSuccess(data.getData());
 
-                getView().hideProgress();
+                        getView().hideProgress();
+                    }
 
-            }
-
-            @Override
-            public void onErrorImpl(String errorMessage) {
-                getView().showToast("应用程序出现错误,请稍后重试");
-                getView().hideProgress();
-            }
-        });
-
+                    @Override
+                    public void onErrorImpl(String errorMessage) {
+                        getView().showToast("应用程序出现错误,请稍后重试");
+                        getView().hideProgress();
+                    }
+                });
     }
 
     public void getWordTypes() {
-        Observable<ClassificationOfCommonWordsBean> ob = createService(CommonWordsApi.class)
-                .setClassificationOfCommonWords();
+        Observable<ClassificationOfCommonWordsBean> ob =
+                createService(CommonWordsApi.class).setClassificationOfCommonWords();
 
-        requestRemote(ob, new BaseRxObserver<ClassificationOfCommonWordsBean>() {
-            @Override
-            public void onNextImpl(ClassificationOfCommonWordsBean data) {
-                if (null == data) {
-                    getView().onGetWordTypesFail();
-                    return;
-                }
-                int status = data.getStatus();
-                if (status != 1) {
-                    getView().onGetWordTypesFail();
-                    return;
-                }
-                List<ClassificationOfCommonWordsBean.ListBean> list = data.getList();
-                if (null == list || list.isEmpty()) {
-                    getView().onGetWordTypesFail();
-                    return;
-                }
-                getView().onGetWordTypesSuccess(list);
-            }
+        requestRemote(
+                ob,
+                new BaseRxObserver<ClassificationOfCommonWordsBean>() {
+                    @Override
+                    public void onNextImpl(ClassificationOfCommonWordsBean data) {
+                        if (null == data) {
+                            getView().onGetWordTypesFail();
+                            return;
+                        }
+                        int status = data.getStatus();
+                        if (status != 1) {
+                            getView().onGetWordTypesFail();
+                            return;
+                        }
+                        List<ClassificationOfCommonWordsBean.ListBean> list = data.getList();
+                        if (null == list || list.isEmpty()) {
+                            getView().onGetWordTypesFail();
+                            return;
+                        }
+                        getView().onGetWordTypesSuccess(list);
+                    }
 
-            @Override
-            public void onErrorImpl(String errorMessage) {
-                getView().onGetWordTypesFail();
-            }
-        });
+                    @Override
+                    public void onErrorImpl(String errorMessage) {
+                        getView().onGetWordTypesFail();
+                    }
+                });
     }
 }

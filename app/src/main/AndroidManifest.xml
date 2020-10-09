@@ -674,6 +674,7 @@
             android:theme="@style/TokenInvalidDialog" />
         <activity android:name="com.ytfu.lawyercircle.ui.register.activity.PrivacyAgreementActivity" />
         <activity android:name=".ui.users.act.SkillsActivityList" />
+        <activity android:name=".ui.users.act.FeedbackActivity" />
 
         <!--service-->
         <service

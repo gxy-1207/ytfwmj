@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.github.lee.annotation.InjectLayout;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.App;
 import com.ytfu.lawyercircle.app.AppConstant;
@@ -26,6 +27,7 @@ import com.ytfu.lawyercircle.ui.pay.bean.AccountPayResponseBean;
 import com.ytfu.lawyercircle.ui.pay.bean.PayBean;
 import com.ytfu.lawyercircle.ui.pay.bean.WxPayBean;
 import com.ytfu.lawyercircle.utils.GlideManager;
+import com.ytfu.lawyercircle.utils.LoginHelper;
 import com.ytfu.lawyercircle.utils.MessageEvent;
 import com.ytfu.lawyercircle.utils.SpUtil;
 import com.ytfu.lawyercircle.utils.dialog.DialogHelper;
@@ -35,7 +37,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -90,6 +95,7 @@ public class ActivityLegalAdviserDetailsBuy
     private String uid;
     private String id;
     private int shoucang;
+    private String price;
 
     //    @Override
     //    protected int provideContentViewId() {
@@ -275,6 +281,7 @@ public class ActivityLegalAdviserDetailsBuy
         //        tvTopTitle.setText(xinagQingBean.getFind().getTitle());
         setToolbarText(R.id.tv_global_title, xinagQingBean.getFind().getTitle());
         shoucang = xinagQingBean.getShoucang();
+        price = xinagQingBean.getFind().getPrice();
         GlideManager.loadImageByUrl(this, xinagQingBean.getFind().getImg(), ivFlgw);
         tvBiaogeTitle.setText(xinagQingBean.getFind().getTitle());
         tvBiaogeMiaoshu.setText("\u3000\u3000" + xinagQingBean.getFind().getDescript());
@@ -400,6 +407,7 @@ public class ActivityLegalAdviserDetailsBuy
         switch (messageEvent.getWhat()) {
             case AppConstant.WX_PAY_SUCCESS:
                 showToast("支付成功");
+                uMengPoint();
                 Intent intent =
                         new Intent(
                                 ActivityLegalAdviserDetailsBuy.this,
@@ -422,6 +430,7 @@ public class ActivityLegalAdviserDetailsBuy
     @Override
     public void onPayByAccountSuccess(AccountPayResponseBean payResponseBean) {
         showToast("支付成功");
+        uMengPoint();
         Intent intent =
                 new Intent(
                         ActivityLegalAdviserDetailsBuy.this,
@@ -439,6 +448,7 @@ public class ActivityLegalAdviserDetailsBuy
                             @Override
                             public void onSuccess() {
                                 showToast("支付成功");
+                                uMengPoint();
                                 Intent intent =
                                         new Intent(
                                                 ActivityLegalAdviserDetailsBuy.this,
@@ -463,6 +473,28 @@ public class ActivityLegalAdviserDetailsBuy
                                 showToast("支付失败");
                             }
                         });
+    }
+    // ===Desc:友盟埋点统计=================================================================
+    public void uMengPoint() {
+        String loginUserId = LoginHelper.getInstance().getLoginUserId();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String format = sdf.format(new Date());
+        String orderid = format + loginUserId;
+        double money;
+        try {
+            money = Double.parseDouble(price);
+        } catch (NumberFormatException e) {
+            Logger.e("umengBuriedPoint" + "----------" + e);
+            e.printStackTrace();
+            return;
+        }
+        Map successPayMap = new HashMap();
+        //        HashMap<String,Object> map = new HashMap<>();
+        successPayMap.put("userid", loginUserId);
+        successPayMap.put("orderid", orderid);
+        successPayMap.put("item", "法律顾问");
+        successPayMap.put("amount", money);
+        MobclickAgent.onEvent(this, "__finish_payment", successPayMap);
     }
 
     @Override

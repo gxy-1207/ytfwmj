@@ -18,6 +18,8 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.github.lee.annotation.InjectPresenter;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.AppConstant;
 import com.ytfu.lawyercircle.base.BaseRecyclerViewFragment;
@@ -33,6 +35,7 @@ import com.ytfu.lawyercircle.ui.users.header.ConsultationDetailsRewardHeader;
 import com.ytfu.lawyercircle.ui.users.p.ConsultationDetailsRewardPresenter;
 import com.ytfu.lawyercircle.ui.users.v.ConsultationDetailsView;
 import com.ytfu.lawyercircle.ui.zixun.activity.AdvisoryReplyDetailActivity;
+import com.ytfu.lawyercircle.utils.LoginHelper;
 import com.ytfu.lawyercircle.utils.MessageEvent;
 import com.ytfu.lawyercircle.utils.SpUtil;
 import com.ytfu.lawyercircle.utils.dialog.DialogHelper;
@@ -43,7 +46,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.jessyan.autosize.utils.LogUtils;
 
@@ -62,6 +69,7 @@ public class ConsultationDetailsRewardFragment
     private ConsultationDetailsNotUnlockedHeader notUnlockedHeader;
     private LinearLayout ll_reward;
     private LinearLayout ll_unrewarded;
+    private String jiesuo_price;
 
     public static ConsultationDetailsRewardFragment newInstance(String id) {
 
@@ -154,7 +162,7 @@ public class ConsultationDetailsRewardFragment
                         v -> {
                             String consultationId = getArgumentString(KEY_CONSULTATION_ID, "");
                             int type = 14;
-                            WantRewardActivity.start(getContext(), consultationId, type);
+                            WantRewardActivity.start(getContext(), consultationId, type, 1);
                         });
         // 追加悬赏
         viewBottom
@@ -163,7 +171,7 @@ public class ConsultationDetailsRewardFragment
                         v -> {
                             String consultationId = getArgumentString(KEY_CONSULTATION_ID, "");
                             int type = 18;
-                            WantRewardActivity.start(getContext(), consultationId, type);
+                            WantRewardActivity.start(getContext(), consultationId, type, 2);
                         });
         // 增加进入动画
         //        mAdapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.SlideInLeft);
@@ -184,6 +192,7 @@ public class ConsultationDetailsRewardFragment
         unlockDialog.setUnlockDescription(contentBean.getJiesuo_miaoshu());
         unlockDialog.setUnlockViceTitle(contentBean.getJiesuo_futitle());
         unlockDialog.setUnlockViceDescription(contentBean.getJiesuo_fumiaoshu());
+        jiesuo_price = contentBean.getJiesuo_price();
         new XPopup.Builder(getContext())
                 .dismissOnBackPressed(false)
                 .dismissOnTouchOutside(false)
@@ -404,6 +413,7 @@ public class ConsultationDetailsRewardFragment
         if (what == AppConstant.WX_PAY_SUCCESS) {
             // 更新支付成功UI显示
             //            MineConsultationListActivity.start(mContext);
+            uMengPoint();
             getPresenter().refresh();
             showCenterToast("支付成功");
         }
@@ -416,6 +426,7 @@ public class ConsultationDetailsRewardFragment
                         new PayHelper.IPayListener() {
                             @Override
                             public void onSuccess() {
+                                uMengPoint();
                                 getPresenter().refresh();
                                 showCenterToast("支付成功");
                             }
@@ -437,6 +448,7 @@ public class ConsultationDetailsRewardFragment
     @Override
     public void onPayByAccountSuccess(AccountPayResponseBean payResponseBean) {
         if (payResponseBean.getStatus() == 1) {
+            uMengPoint();
             getPresenter().refresh();
             showCenterToast("支付成功");
         } else {
@@ -446,6 +458,28 @@ public class ConsultationDetailsRewardFragment
 
     @Override
     public void onConsultationDetailsFiled() {}
+    // ===Desc:友盟统计=================================================================
+    private void uMengPoint() {
+        String loginUserId = LoginHelper.getInstance().getLoginUserId();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String format = sdf.format(new Date());
+        String orderid = format + loginUserId;
+        double money;
+        try {
+            money = Double.parseDouble(jiesuo_price);
+        } catch (NumberFormatException e) {
+            Logger.e("jiesuo" + "----------" + e);
+            e.printStackTrace();
+            return;
+        }
+        Map successPayMap = new HashMap();
+        //        HashMap<String,Object> map = new HashMap<>();
+        successPayMap.put("userid", loginUserId);
+        successPayMap.put("orderid", orderid);
+        successPayMap.put("item", "咨询解锁");
+        successPayMap.put("amount", money);
+        MobclickAgent.onEvent(getContext(), "__finish_payment", successPayMap);
+    }
 
     @Override
     public void onDestroy() {

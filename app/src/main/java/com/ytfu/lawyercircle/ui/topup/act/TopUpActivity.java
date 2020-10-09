@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.github.lee.annotation.InjectLayout;
 import com.github.lee.annotation.InjectPresenter;
+import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.AppConstant;
 import com.ytfu.lawyercircle.base.BaseActivity;
@@ -18,6 +20,7 @@ import com.ytfu.lawyercircle.ui.pay.bean.WxPayBean;
 import com.ytfu.lawyercircle.ui.topup.p.TopUpPresenter;
 import com.ytfu.lawyercircle.ui.topup.v.TopUpView;
 import com.ytfu.lawyercircle.utils.CommonUtil;
+import com.ytfu.lawyercircle.utils.LoginHelper;
 import com.ytfu.lawyercircle.utils.MessageEvent;
 import com.ytfu.lawyercircle.utils.SpUtil;
 import com.ytfu.lawyercircle.utils.dialog.DialogHelper;
@@ -26,6 +29,11 @@ import com.ytfu.lawyercircle.utils.dialog.PayDialog;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import qiu.niorgai.StatusBarCompat;
@@ -112,6 +120,7 @@ public class TopUpActivity extends BaseActivity<TopUpView, TopUpPresenter> imple
     public void onWechatPaySuccess(MessageEvent event) {
         int what = event.getWhat();
         if (what == AppConstant.WX_PAY_SUCCESS) {
+            umengBuriedPoint();
             setResult(RESULT_OK);
             finish();
         }
@@ -130,6 +139,7 @@ public class TopUpActivity extends BaseActivity<TopUpView, TopUpPresenter> imple
                             @Override
                             public void onSuccess() {
                                 showToast("充值成功");
+                                umengBuriedPoint();
                                 setResult(RESULT_OK);
                                 finish();
                             }
@@ -144,6 +154,29 @@ public class TopUpActivity extends BaseActivity<TopUpView, TopUpPresenter> imple
                             public void onFail() {}
                         });
         PayHelper.getInstance().AliPay(this, sign);
+    }
+    // ===Desc:友盟自定义事件统计=================================================================
+    private void umengBuriedPoint() {
+        String loginUserId = LoginHelper.getInstance().getLoginUserId();
+        String price = et_top_money.getText().toString().trim();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String format = sdf.format(new Date());
+        String orderid = format + loginUserId;
+        double money;
+        try {
+            money = Double.parseDouble(price);
+        } catch (NumberFormatException e) {
+            Logger.e("umengBuriedPoint" + "----------" + e);
+            e.printStackTrace();
+            return;
+        }
+        Map successPayMap = new HashMap();
+        //        HashMap<String,Object> map = new HashMap<>();
+        successPayMap.put("userid", loginUserId);
+        successPayMap.put("orderid", orderid);
+        successPayMap.put("item", "余额充值");
+        successPayMap.put("amount", money);
+        MobclickAgent.onEvent(TopUpActivity.this, "__finish_payment", successPayMap);
     }
 
     @Override

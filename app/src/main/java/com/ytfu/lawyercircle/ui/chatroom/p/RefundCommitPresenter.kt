@@ -6,7 +6,7 @@ import com.ytfu.lawyercircle.helper.BaseRxObserver
 import com.ytfu.lawyercircle.ui.chatroom.v.RefundCommitView
 import com.ytfu.lawyercircle.ui.users.bean.MyRefundBean
 import io.reactivex.disposables.Disposable
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -14,11 +14,11 @@ import java.io.File
 class RefundCommitPresenter : BasePresenter<RefundCommitView>() {
 
     fun refund(userId: String, lawyerId: String, content: String, file: File?) {
-        val ui = RequestBody.create(MediaType.parse("text/plain"), userId)
-        val li = RequestBody.create(MediaType.parse("text/plain"), lawyerId)
-        val c = RequestBody.create(MediaType.parse("text/plain"), content)
+        val ui = RequestBody.create("text/plain".toMediaTypeOrNull(), userId)
+        val li = RequestBody.create("text/plain".toMediaTypeOrNull(), lawyerId)
+        val c = RequestBody.create("text/plain".toMediaTypeOrNull(), content)
         val f = if (file != null) {
-            val rb = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+            val rb = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
             MultipartBody.Part.createFormData("voucher", file.name, rb)
         } else {
             null

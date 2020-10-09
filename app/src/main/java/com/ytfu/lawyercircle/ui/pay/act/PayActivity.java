@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.github.lee.annotation.InjectLayout;
 import com.github.lee.annotation.InjectPresenter;
+import com.umeng.analytics.MobclickAgent;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.AppConstant;
 import com.ytfu.lawyercircle.base.BaseActivity;
@@ -29,6 +30,11 @@ import com.ytfu.lawyercircle.utils.SpUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import qiu.niorgai.StatusBarCompat;
@@ -58,6 +64,8 @@ public class PayActivity extends BaseActivity<PayView, PayPresenter> implements 
 
     private static final String KEY_MONEY = "MONEY";
     private static final String KEY_ADVISORY_ID = "ADVISORY_ID";
+    private boolean isCheck;
+    private double jiaji;
 
     public static void start(Context context, String advisoryId, double money) {
         Bundle bundle = new Bundle();
@@ -110,6 +118,7 @@ public class PayActivity extends BaseActivity<PayView, PayPresenter> implements 
                             new Runnable() {
                                 @Override
                                 public void run() {
+                                    uMengPoint();
                                     MineConsultationListActivity.start(PayActivity.this);
                                     //                    MainActivity.start(mContext, 1);
                                     finish();
@@ -129,7 +138,7 @@ public class PayActivity extends BaseActivity<PayView, PayPresenter> implements 
         tv_pay_money.setText(getBundleDouble(KEY_MONEY, 0.0) + "元");
         tv_pay_appendix_tip.setText(data.getZhuijia_title());
         tv_pay_appendix_desc.setText(data.getZhuijia_descript());
-
+        jiaji = data.getJiaji();
         double total = getBundleDouble(KEY_MONEY, 0.0) + data.getJiaji();
         tv_pay_total.setText("合计:" + total + "元");
         rb_pay_self.setText("我的余额(¥" + CommonUtil.doubleFormat(data.getIncome(), "0.00") + "元)");
@@ -220,6 +229,7 @@ public class PayActivity extends BaseActivity<PayView, PayPresenter> implements 
                                                 new Runnable() {
                                                     @Override
                                                     public void run() {
+                                                        uMengPoint();
                                                         MineConsultationListActivity.start(
                                                                 PayActivity.this);
                                                         //
@@ -251,10 +261,33 @@ public class PayActivity extends BaseActivity<PayView, PayPresenter> implements 
                         new Runnable() {
                             @Override
                             public void run() {
+                                uMengPoint();
                                 MineConsultationListActivity.start(PayActivity.this);
                                 //                MainActivity.start(mContext, 1);
                                 finish();
                             }
                         });
+    }
+
+    // ===Desc:友盟统计=================================================================
+    private void uMengPoint() {
+        String price = tv_pay_total.getText().toString();
+        String loginUserId = LoginHelper.getInstance().getLoginUserId();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String format = sdf.format(new Date());
+        String orderid = format + loginUserId;
+        double payMoney;
+        if (isCheck == true) {
+            payMoney = getBundleDouble(KEY_MONEY, 0.0) + jiaji;
+        } else {
+            payMoney = getBundleDouble(KEY_MONEY, 0.0);
+        }
+        Map successPayMap = new HashMap();
+        //        HashMap<String,Object> map = new HashMap<>();
+        successPayMap.put("userid", loginUserId);
+        successPayMap.put("orderid", orderid);
+        successPayMap.put("item", "咨询悬赏");
+        successPayMap.put("amount", payMoney);
+        MobclickAgent.onEvent(this, "__finish_payment", successPayMap);
     }
 }

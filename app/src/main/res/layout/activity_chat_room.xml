@@ -262,39 +262,84 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:gravity="center_vertical"
-        android:minHeight="50dp"
-        android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/et_room_input"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:hint="@string/hint_input_send_message"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine"
-            android:lineSpacingMultiplier="1.2"
-            android:maxLines="3"
-            android:textColorHint="#FF44A2F7"
-            android:textSize="14sp"
-            tools:text="asihdanhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwud\nhdwud\nqsdhud\ndhioqwid\nasihda\nhdwud\nqsdhud\ndhioqwid\n" />
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-        <TextView
-            android:id="@+id/tv_room_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/shape_btn_withdraw"
-            android:paddingStart="12dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="4dp"
-            android:text="@string/txt_send_message"
-            android:textColor="@android:color/white" />
+            <EditText
+                android:id="@+id/et_room_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="@string/hint_input_send_message"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:lineSpacingMultiplier="1.2"
+                android:maxLines="3"
+                android:textColorHint="#FF44A2F7"
+                android:textSize="14sp"
+                tools:text="asihdanhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwudnhdwud\nhdwud\nqsdhud\ndhioqwid\nasihda\nhdwud\nqsdhud\ndhioqwid\n" />
 
+            <TextView
+                android:id="@+id/tv_room_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/shape_btn_withdraw"
+                android:paddingStart="12dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="4dp"
+                android:text="@string/txt_send_message"
+                android:visibility="gone"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/iv_room_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@mipmap/icon_add"
+                android:paddingStart="12dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="4dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="12dp"
+            android:background="#FFE5E5E5" />
+
+        <LinearLayout
+            android:id="@+id/rv_common_root"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@mipmap/icon_picture"
+                android:drawablePadding="16dp"
+                android:text="相册"
+                android:textSize="13sp"
+                android:textColor="@color/textColor_33"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="51dp" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

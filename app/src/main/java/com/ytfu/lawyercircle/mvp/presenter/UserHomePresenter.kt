@@ -91,6 +91,21 @@ class UserHomePresenter : BasicMVPPresenter<UserHomeView>(), EMMessageListener {
         //                        });
     }
 
+    /**
+     * 获取公共开关状态
+     * */
+    fun setStatus() {
+        requestRemote(
+                run = { createService(CommonApi::class.java).getStatus() },
+                success = {
+                    val status = it.status
+                    if (status == 1) {
+                        getView().onStatusSuccess(it)
+                    }
+                }
+        )
+    }
+
     fun destroy() {
         //监听环信消息接受，更新未读消息小圆点
         EmChatManager.getInstance().unRegisterMessageListener(this)

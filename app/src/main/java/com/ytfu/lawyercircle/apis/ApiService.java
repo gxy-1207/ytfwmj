@@ -106,6 +106,7 @@ import com.ytfu.lawyercircle.ui.qisuzhuang.bean.ZjqdXqBean;
 import com.ytfu.lawyercircle.ui.qisuzhuang.bean.ZjqdXqSendEmailBean;
 import com.ytfu.lawyercircle.ui.register.bean.RegistBean;
 import com.ytfu.lawyercircle.ui.updatapk.UpDateApkBean;
+import com.ytfu.lawyercircle.ui.users.bean.FeedBackBean;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -779,4 +780,22 @@ public interface ApiService {
             @Field("lsid") String lawyerId,
             @Field("sid") String complaintId,
             @Field("zhengju_str") String proofIds);
+
+    /**
+     * 投诉 https://yuntaifawu.com/api/chat/complaint_submit
+     *
+     * @param uid 用户id
+     * @param type 聊天列表是1 我的是2
+     * @param content 投诉内容
+     * @param name 姓名
+     * @param mobile 电话
+     */
+    @POST("chat/complaint_submit")
+    @FormUrlEncoded
+    Observable<FeedBackBean> getFeedBack(
+            @Field("uid") String uid,
+            @Field("content") String content,
+            @Field("mobile") String mobile,
+            @Field("name") String name,
+            @Field("type") int type);
 }

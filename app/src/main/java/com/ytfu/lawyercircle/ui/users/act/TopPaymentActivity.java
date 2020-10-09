@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.github.lee.annotation.InjectLayout;
 import com.github.lee.annotation.InjectPresenter;
+import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.AppConstant;
 import com.ytfu.lawyercircle.base.BaseActivity;
@@ -16,6 +18,7 @@ import com.ytfu.lawyercircle.ui.pay.bean.AccountPayResponseBean;
 import com.ytfu.lawyercircle.ui.users.bean.PublicPriceBean;
 import com.ytfu.lawyercircle.ui.users.p.TopPaymentPresenter;
 import com.ytfu.lawyercircle.ui.users.v.TopPaymentView;
+import com.ytfu.lawyercircle.utils.LoginHelper;
 import com.ytfu.lawyercircle.utils.MessageEvent;
 import com.ytfu.lawyercircle.utils.SpUtil;
 import com.ytfu.lawyercircle.utils.dialog.DialogHelper;
@@ -24,6 +27,11 @@ import com.ytfu.lawyercircle.utils.dialog.PayDialog;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -146,6 +154,7 @@ public class TopPaymentActivity extends BaseActivity<TopPaymentView, TopPaymentP
         if (what == AppConstant.WX_PAY_SUCCESS) {
             // 更新支付成功UI显示
             //            MineConsultationListActivity.start(mContext);
+            uMengPoint();
             showCenterToast("支付成功");
             finish();
         }
@@ -159,6 +168,7 @@ public class TopPaymentActivity extends BaseActivity<TopPaymentView, TopPaymentP
                             @Override
                             public void onSuccess() {
                                 showCenterToast("支付成功");
+                                uMengPoint();
                                 finish();
                             }
 
@@ -180,10 +190,33 @@ public class TopPaymentActivity extends BaseActivity<TopPaymentView, TopPaymentP
     public void onPayByAccountSuccess(AccountPayResponseBean payResponseBean) {
         if (payResponseBean.getStatus() == 1) {
             showCenterToast("余额支付成功");
+            uMengPoint();
             finish();
         } else {
             showCenterToast("余额支付失败");
         }
+    }
+    // ===Desc:友盟埋点=================================================================
+    private void uMengPoint() {
+        String loginUserId = LoginHelper.getInstance().getLoginUserId();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String format = sdf.format(new Date());
+        String orderid = format + loginUserId;
+        double money;
+        try {
+            money = Double.parseDouble(topPrice);
+        } catch (NumberFormatException e) {
+            Logger.e("umengBuriedPoint" + "----------" + e);
+            e.printStackTrace();
+            return;
+        }
+        Map successPayMap = new HashMap();
+        //        HashMap<String,Object> map = new HashMap<>();
+        successPayMap.put("userid", loginUserId);
+        successPayMap.put("orderid", orderid);
+        successPayMap.put("item", "置顶咨询");
+        successPayMap.put("amount", money);
+        MobclickAgent.onEvent(this, "__finish_payment", successPayMap);
     }
 
     @Override

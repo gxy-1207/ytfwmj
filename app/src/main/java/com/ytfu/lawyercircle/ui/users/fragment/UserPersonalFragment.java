@@ -3,8 +3,11 @@ package com.ytfu.lawyercircle.ui.users.fragment;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -32,6 +35,7 @@ import com.ytfu.lawyercircle.ui.mine.bean.MineBean;
 import com.ytfu.lawyercircle.ui.mine.bean.ShenHeJInduBean;
 import com.ytfu.lawyercircle.ui.mseeage.activity.UserEvaluateActivityNew;
 import com.ytfu.lawyercircle.ui.users.act.AnnouncementActivity;
+import com.ytfu.lawyercircle.ui.users.act.FeedbackActivity;
 import com.ytfu.lawyercircle.ui.users.act.MineConsultationListActivity;
 import com.ytfu.lawyercircle.ui.users.act.MyRefundActivity;
 import com.ytfu.lawyercircle.ui.users.bean.RefundButtonVisibleBean;
@@ -72,6 +76,12 @@ public class UserPersonalFragment extends BaseFragment<UserPersonalView, UserPer
 
     @BindView(R.id.red_dot)
     ImageView red_dot;
+
+    @BindView(R.id.ll_personal_kefu)
+    LinearLayout ll_personal_kefu;
+
+    @BindView(R.id.ll_personal_feedback)
+    LinearLayout ll_personal_feedback;
 
     public static UserPersonalFragment newInstance() {
         return new UserPersonalFragment();
@@ -152,10 +162,44 @@ public class UserPersonalFragment extends BaseFragment<UserPersonalView, UserPer
         // 公告
         rootView.findViewById(R.id.rl_personal_announcement)
                 .setOnClickListener(v -> AnnouncementActivity.start(mContext));
+        // 客服
+        rootView.findViewById(R.id.ll_personal_kefu)
+                .setOnClickListener(
+                        view -> {
+                            String phone =
+                                    SpUtil.getString(
+                                            mContext, AppConstant.USER_KEFU_PHONE, "18500131444");
+                            callPhone(phone);
+                        });
+        // 投诉
+        rootView.findViewById(R.id.ll_personal_feedback)
+                .setOnClickListener(
+                        view -> {
+                            FeedbackActivity.start(getContext(), 2);
+                        });
         // 设置
         rootView.findViewById(R.id.tv_personal_setting)
                 .setOnClickListener(
                         v -> startActivity(new Intent(getActivity(), ActivitySetting.class)));
+    }
+
+    @Override
+    protected void initView(View rootView) {
+        super.initView(rootView);
+        int kefuStatus = SpUtil.getInteger(mContext, AppConstant.USER_KEFU_STATUS, -1);
+        // kefuStatus  1显示客服条目   2隐藏客服条目
+        if (kefuStatus == 1) {
+            ll_personal_kefu.setVisibility(View.VISIBLE);
+        } else {
+            ll_personal_kefu.setVisibility(View.GONE);
+        }
+        int tousuStatus = SpUtil.getInteger(mContext, AppConstant.USER_TOUSU_STATUS, -1);
+        // kefuStatus  1显示投诉条目   2隐藏投诉条目
+        if (tousuStatus == 1) {
+            ll_personal_feedback.setVisibility(View.VISIBLE);
+        } else {
+            ll_personal_feedback.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -310,5 +354,17 @@ public class UserPersonalFragment extends BaseFragment<UserPersonalView, UserPer
         Resources resources = getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
+    }
+
+    // ===Desc:拨打电话=================================================================
+    public void callPhone(String str) {
+        if (TextUtils.isEmpty(str)) {
+            showToast("客服电话为空");
+            return;
+        }
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + str));
+        startActivity(intent);
     }
 }

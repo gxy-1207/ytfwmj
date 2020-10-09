@@ -1,16 +1,26 @@
 package com.ytfu.lawyercircle.ui.chatroom.activity;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,8 +36,16 @@ import com.github.lee.annotation.InjectLayout;
 import com.github.lee.annotation.InjectPresenter;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.easeui.model.EaseCompat;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.util.XPopupUtils;
 import com.orhanobut.logger.Logger;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.Configuration;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
+import com.umeng.analytics.MobclickAgent;
+import com.yanzhenjie.permission.Permission;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.AppConstant;
 import com.ytfu.lawyercircle.base.BaseActivity;
@@ -46,6 +64,8 @@ import com.ytfu.lawyercircle.ui.custom.CopyButtonLibrary;
 import com.ytfu.lawyercircle.ui.falvguwen.activity.ActivityLegalAdviser;
 import com.ytfu.lawyercircle.ui.kaitingzhushou.activity.ActivityOpenHelper;
 import com.ytfu.lawyercircle.ui.lawyer.chat.adapter.LawyerChatRoomAdapter;
+import com.ytfu.lawyercircle.ui.lawyer.chat.bean.GetQiniuTokenBean;
+import com.ytfu.lawyercircle.ui.lawyer.chat.bean.HistoryChatBodyBean;
 import com.ytfu.lawyercircle.ui.lawyer.chat.bean.HistoryChatExtBean;
 import com.ytfu.lawyercircle.ui.lawyer.chat.bean.HistoryChatItemBean;
 import com.ytfu.lawyercircle.ui.lawyer.chat.bean.HistoryChatItemMultiItem;
@@ -64,6 +84,8 @@ import com.ytfu.lawyercircle.ui.pay.bean.WxPayBean;
 import com.ytfu.lawyercircle.ui.redpackage.act.SendRedPackageActivity;
 import com.ytfu.lawyercircle.ui.redpackage.act.UserRedPackageActivity;
 import com.ytfu.lawyercircle.ui.users.bean.RefundButtonVisibleBean;
+import com.ytfu.lawyercircle.utils.AndPermissionUtil;
+import com.ytfu.lawyercircle.utils.CommonUtil;
 import com.ytfu.lawyercircle.utils.DialorUtil;
 import com.ytfu.lawyercircle.utils.LoginHelper;
 import com.ytfu.lawyercircle.utils.MessageEvent;
@@ -74,9 +96,14 @@ import com.ytfu.lawyercircle.utils.dialog.DialogHelper;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import qiu.niorgai.StatusBarCompat;
@@ -115,6 +142,12 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
     @BindView(R.id.tv_room_refund)
     TextView tv_room_refund;
 
+    @BindView(R.id.tv_room_send)
+    TextView tv_room_send;
+
+    @BindView(R.id.iv_room_select)
+    ImageView iv_room_select;
+
     private LawyerChatRoomAdapter adapter;
     /** 显示支付的底部dialog */
     private PayBottomDialog dialog;
@@ -131,11 +164,14 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
     /** 退款 */
     private final int refundint = 3;
 
+    protected static final int REQUEST_CODE_LOCAL = 4;
     private static final String KEY_IS_CUSTOMER_SERVICE = "KEY_IS_CUSTOMER_SERVICE";
     private static final String KEY_TO_USER_ID = "KEY_TO_USER_ID";
     private static final String KEY_TO_USER_NAME = "KEY_TO_USER_NAME";
     private static final String KEY_TO_USER_AVATAR = "KEY_TO_USER_AVATAR";
     private static final String KEY_IS_FROM_NOTIFICATION = "KEY_IS_FROM_NOTIFICATION";
+    private String qiNiuToken;
+    private UploadManager uploadManager;
 
     public static void start(
             Context context,
@@ -348,6 +384,53 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
                                         mContext, ext, lawyerName, lawyerAvatar, timestamp);
                             }
                             break;
+                        case R.id.iv_chat_item_content:
+                            // 点击图片放大
+                            HistoryChatItemMultiItem itemImg =
+                                    UserChatRoomActivity.this.adapter.getData().get(position);
+                            if (null == itemImg) {
+                                showToast("应用程序出现未知错误,请稍后重试");
+                                return;
+                            }
+                            int typeImg = itemImg.getItemType();
+                            if (typeImg == HistoryChatItemMultiItem.TYPE_SEND_IMG
+                                    || typeImg == HistoryChatItemMultiItem.TYPE_RECEIVE_IMG) {
+                                HistoryChatBodyBean body = itemImg.getChatItem().getBody();
+                                String messageId = itemImg.getChatItem().getMessageId();
+                                Log.e("messageId", "------" + messageId);
+                                String path = body.getText();
+                                Log.e("path", "------" + path);
+                                ImageView imageView = view.findViewById(R.id.iv_chat_item_content);
+                                new XPopup.Builder(this)
+                                        .asImageViewer(
+                                                imageView,
+                                                path,
+                                                true,
+                                                -1,
+                                                -1,
+                                                50,
+                                                false,
+                                                new ImageLoader())
+                                        .show();
+                                //                                int width = imageView.getWidth();
+                                //                                int height =
+                                // imageView.getHeight();
+                                //                                int[] location = new int[2];
+                                //
+                                // imageView.getLocationOnScreen(location);
+                                //
+                                //                                ChatBigImageActivity.start(
+                                //                                        UserChatRoomActivity.this,
+                                //                                        path,
+                                //                                        location[0],
+                                //                                        location[1],
+                                //                                        width,
+                                //                                        height);
+                            }
+
+                            //                                EaseShowBigImageActivity
+
+                            break;
                     }
                 });
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -477,6 +560,145 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
     }
 
     @Override
+    protected void setViewListener() {
+        super.setViewListener();
+        et_room_input.setOnTouchListener(
+                new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        hideImgControllerPanel(false);
+                        view.performClick();
+                        return false;
+                    }
+                });
+        et_room_input.setOnFocusChangeListener(
+                new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
+                        if (b) {
+                            hideImgControllerPanel(true);
+                        }
+                    }
+                });
+        et_room_input.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence charSequence, int i, int i1, int i2) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        String input = et_room_input.getText().toString();
+                        if (!input.isEmpty()) {
+                            tv_room_send.setVisibility(View.VISIBLE);
+                            iv_room_select.setVisibility(View.GONE);
+                        } else {
+                            tv_room_send.setVisibility(View.GONE);
+                            iv_room_select.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {}
+                });
+        // 选择图片
+        findViewById(R.id.iv_room_select)
+                .setOnClickListener(
+                        view -> {
+                            View viewById = findViewById(R.id.rv_common_root);
+                            CommonUtil.hideSoftInput(this);
+                            if (viewById.isShown()) {
+                                hideImgControllerPanel(true);
+                            } else {
+                                showImgControllerPanel2(0);
+                            }
+                        });
+    }
+
+    private void hideImgControllerPanel(boolean b) {
+        View view = findViewById(R.id.rv_common_root);
+        int height = XPopupUtils.getWindowHeight(mContext) / 8 * 2;
+        if (b) {
+            if (view.isShown()) {
+                ValueAnimator anim = ValueAnimator.ofInt(height, 0);
+                anim.addListener(
+                        new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animator) {}
+
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                view.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animator) {}
+
+                            @Override
+                            public void onAnimationRepeat(Animator animator) {}
+                        });
+                anim.addUpdateListener(
+                        valueAnimator -> {
+                            view.getLayoutParams().height = (int) valueAnimator.getAnimatedValue();
+                            view.requestLayout();
+                        });
+                anim.setDuration(150);
+                anim.start();
+            }
+        } else {
+            view.setVisibility(View.GONE);
+        }
+    }
+
+    private void showImgControllerPanel2(int i) {
+        CommonUtil.hideSoftInput(this);
+        findViewById(R.id.tv_album)
+                .setOnClickListener(
+                        view -> {
+                            //                            showToast("相册");
+                            selectPic();
+                        });
+        View view = findViewById(R.id.rv_common_root);
+
+        int height = XPopupUtils.getWindowHeight(mContext) / 8 * 2;
+        if (!view.isShown()) {
+            ValueAnimator anim = ValueAnimator.ofInt(0, height);
+            anim.addListener(
+                    new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animator) {
+                            view.setVisibility(View.VISIBLE);
+                            //                            ViewPager vp = findViewById(R.id.vp);
+                            //                            vp.setCurrentItem(position);
+                            //                    MagicIndicator mi =
+                            // findViewById(R.id.mi_indicator);
+                            //                    mi.getNavigator().notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animator) {}
+
+                        @Override
+                        public void onAnimationCancel(Animator animator) {}
+
+                        @Override
+                        public void onAnimationRepeat(Animator animator) {}
+                    });
+            anim.addUpdateListener(
+                    valueAnimator -> {
+                        view.getLayoutParams().height = (int) valueAnimator.getAnimatedValue();
+                        view.requestLayout();
+                    });
+            anim.setDuration(150);
+            anim.start();
+        }
+    }
+    // ===Desc:调用后台接口获取七牛云token=================================================================
+    private void selectPic() {
+        getPresenter().getQiNiuToken();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CODE_SEND_RED_PACKAGE) {
@@ -487,8 +709,95 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
             String selfId = SpUtil.getString(mContext, AppConstant.UID, "");
             getPresenter().getHistoryRecord(toUserId, selfId);
             double money = getBundleDouble(data, SendRedPackageActivity.KEY_RESULT_MONEY, 0.0);
+        } else if (requestCode == REQUEST_CODE_LOCAL) {
+            if (data != null) {
+                Uri selectedImage = data.getData();
+                if (selectedImage != null) {
+                    sendPicUri(selectedImage);
+                }
+            }
         }
         Logger.e("onActivityResult requestCode = " + requestCode + ",,resultCode = " + resultCode);
+    }
+
+    private void sendPicUri(Uri selectedImage) {
+        // 设置图片名字
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String key =
+                "icon_"
+                        + sdf.format(new Date())
+                        + LoginHelper.getInstance().getLoginUserId()
+                        + ".png";
+        String path = EaseCompat.getPath(this, selectedImage);
+        //        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        //        Cursor cursor =
+        //                this.getContentResolver().query(selectedImage, filePathColumn, null, null,
+        // null);
+        //        if (cursor != null) {
+        //            cursor.moveToFirst();
+        //            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        //            String picturePath = cursor.getString(columnIndex);
+        //            cursor.close();
+        //            cursor = null;
+        //
+        //            if (picturePath == null || picturePath.equals("null")) {
+        //                Toast toast =
+        //                        Toast.makeText(
+        //                                this,
+        //                                com.hyphenate.easeui.R.string.cant_find_pictures,
+        //                                Toast.LENGTH_SHORT);
+        //                toast.setGravity(Gravity.CENTER, 0, 0);
+        //                toast.show();
+        //                return;
+        //            }
+        //            uploadImgQiNiu(picturePath, key, qiNiToken);
+        //            //            sendImageMessage(picturePath);
+        //        } else {
+        //            File file = new File(selectedImage.getPath());
+        //            if (!file.exists()) {
+        //                Toast toast =
+        //                        Toast.makeText(
+        //                                this,
+        //                                com.hyphenate.easeui.R.string.cant_find_pictures,
+        //                                Toast.LENGTH_SHORT);
+        //                toast.setGravity(Gravity.CENTER, 0, 0);
+        //                toast.show();
+        //                return;
+        //            }
+        uploadImgQiNiu(path, key, qiNiuToken);
+        Log.e("path", "-------" + path);
+        Log.e("key", "-------" + key);
+        //            sendImageMessage(file.getAbsolutePath());
+        //        }
+    }
+
+    public void uploadImgQiNiu(String imagePath, String key, String token) {
+        Configuration configuration =
+                new Configuration.Builder().connectTimeout(10).responseTimeout(60).build();
+        if (uploadManager == null) {
+            uploadManager = new UploadManager(configuration);
+        }
+        uploadManager.put(
+                imagePath,
+                key,
+                token,
+                new UpCompletionHandler() {
+                    @Override
+                    public void complete(
+                            String s, ResponseInfo responseInfo, JSONObject jsonObject) {
+                        if (responseInfo.isOK()) {
+                            Log.e("qiniu", "-----" + s);
+                            String imageUrl = "http://chat.yuntaifawu.com/" + s;
+                            Logger.e(imageUrl);
+                            String selfId = SpUtil.getString(mContext, AppConstant.UID, "");
+                            String toUserId = getBundleString(KEY_TO_USER_ID, "");
+                            getPresenter().sendImgMessage(selfId, toUserId, imagePath, imageUrl);
+                        } else {
+                            Logger.e(responseInfo.error);
+                        }
+                    }
+                },
+                null);
     }
 
     @Override
@@ -602,7 +911,30 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
 
                         getPresenter()
                                 .userSyncMessageToService(
-                                        toUserId, fromUserId, itemBean.getBody().getText());
+                                        toUserId, fromUserId, itemBean.getBody().getText(), "");
+                    }
+                });
+    }
+
+    @Override
+    public void onSendImgSuccess(
+            String toUserId, String fromUserId, HistoryChatItemBean itemBean, String imageUrl) {
+        runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        // 更新adapter中ui显示
+                        int index = adapter.indexOfByMessageId(itemBean.getMessageId());
+                        if (index != -1) {
+                            HistoryChatItemMultiItem item = adapter.getData().get(index);
+                            item.getChatItem().setStatus(2);
+                            adapter.notifyItemChanged(index);
+                        }
+
+                        // 同步消息到服务器
+                        //                        String consultId = getBundleString(KEY_CONSULT_ID,
+                        // "");
+                        getPresenter().userSyncMessageToService(toUserId, fromUserId, "", imageUrl);
                     }
                 });
     }
@@ -617,6 +949,7 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
             // 更新支付成功UI显示
             // 更新UI
             if (null != clickPayItem) {
+                uMengPoint();
                 String toUserId = getBundleString(KEY_TO_USER_ID, "");
                 String selfId = SpUtil.getString(mContext, AppConstant.UID, "");
                 getPresenter().getHistoryRecord(toUserId, selfId);
@@ -680,6 +1013,7 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
                                 Logger.e("!!! onSuccess");
                                 // 支付宝支付成功   更新UI显示
                                 if (null != clickPayItem) {
+                                    uMengPoint();
                                     String toUserId = getBundleString(KEY_TO_USER_ID, "");
                                     String selfId = SpUtil.getString(mContext, AppConstant.UID, "");
                                     getPresenter().getHistoryRecord(toUserId, selfId);
@@ -1033,9 +1367,16 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
 
     @Override
     public void onPayByAccountSuccess() {
-        String toUserId = getBundleString(KEY_TO_USER_ID, "");
-        String selfId = SpUtil.getString(mContext, AppConstant.UID, "");
-        getPresenter().getHistoryRecord(toUserId, selfId);
+        if (null != clickPayItem) {
+            // 友盟统计
+            uMengPoint();
+            String toUserId = getBundleString(KEY_TO_USER_ID, "");
+            String selfId = SpUtil.getString(mContext, AppConstant.UID, "");
+            getPresenter().getHistoryRecord(toUserId, selfId);
+        }
+        //        String toUserId = getBundleString(KEY_TO_USER_ID, "");
+        //        String selfId = SpUtil.getString(mContext, AppConstant.UID, "");
+        //        getPresenter().getHistoryRecord(toUserId, selfId);
     }
 
     @Override
@@ -1098,5 +1439,50 @@ public class UserChatRoomActivity extends BaseActivity<UserChatRoomView, UserCha
             tv_room_complaint.setVisibility(View.VISIBLE);
             tv_room_refund.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onGetQiNiuToken(GetQiniuTokenBean tokenBean) {
+        qiNiuToken = tokenBean.getToken();
+        Intent intent;
+        if (Build.VERSION.SDK_INT < 19) {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+        } else {
+            intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        }
+        // 请求权限
+        AndPermissionUtil.getInstance()
+                .requestPermissions(
+                        this,
+                        () -> {
+                            // 调用相册
+                            startActivityForResult(intent, REQUEST_CODE_LOCAL);
+                        },
+                        Permission.Group.STORAGE);
+    }
+
+    // ===Desc:友盟统计支付=================================================================
+    private void uMengPoint() {
+        String loginUserId = LoginHelper.getInstance().getLoginUserId();
+        String price = clickPayItem.getChatItem().getExt().getPrice();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String format = sdf.format(new Date());
+        String orderid = format + loginUserId;
+        double money;
+        try {
+            money = Double.parseDouble(price);
+        } catch (NumberFormatException e) {
+            Logger.e("uMengPoint" + "----------" + e);
+            e.printStackTrace();
+            return;
+        }
+        Map successPayMap = new HashMap();
+        //        HashMap<String,Object> map = new HashMap<>();
+        successPayMap.put("userid", loginUserId);
+        successPayMap.put("orderid", orderid);
+        successPayMap.put("item", "服务费");
+        successPayMap.put("amount", money);
+        MobclickAgent.onEvent(this, "__finish_payment", successPayMap);
     }
 }

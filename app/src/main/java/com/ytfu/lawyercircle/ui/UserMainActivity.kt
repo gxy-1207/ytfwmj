@@ -27,9 +27,11 @@ import com.ytfu.lawyercircle.mvp.presenter.UserHomePresenter
 import com.ytfu.lawyercircle.mvp.view.UserHomeView
 import com.ytfu.lawyercircle.ui.adapter.MainPageAdapter
 import com.ytfu.lawyercircle.ui.login.activity.LoginCodeActivity
+import com.ytfu.lawyercircle.ui.updatapk.StatusBean
 import com.ytfu.lawyercircle.ui.updatapk.UpDateApkBean
 import com.ytfu.lawyercircle.utils.ApkUtil
 import com.ytfu.lawyercircle.utils.LoginHelper
+import com.ytfu.lawyercircle.utils.SpUtil
 import constacne.UiType.CUSTOM
 import kotlinx.android.synthetic.main.activity_user_main.*
 import listener.OnBtnClickListener
@@ -144,11 +146,19 @@ class UserMainActivity : BaseEmptyActivity(), UserHomeView {
         tv_main_red_point.requestLayout()
     }
 
+    override fun onStart() {
+        super.onStart()
+        //获取公共字段
+        userHomePresenter.setStatus()
+    }
+
     override fun onResume() {
         super.onResume()
         //检测更新  检测律师认证
         userHomePresenter.checkAttorneyCertified()
         userHomePresenter.checkUpdate()
+        //获取公共字段
+        userHomePresenter.setStatus()
         //设置未读消息小红点
         val allUnreadCount = EmChatManager.getInstance().allUnreadCount
         setRedPoint(allUnreadCount)
@@ -313,6 +323,13 @@ class UserMainActivity : BaseEmptyActivity(), UserHomeView {
                         })
                 .updateConfig(updateConfig)
                 .update()
+    }
+
+    override fun onStatusSuccess(data: StatusBean) {
+        SpUtil.putInteger(this, AppConstant.USER_TOUSU_STATUS, data.userTousuStatus)
+        SpUtil.putInteger(this, AppConstant.XIAOXI_TOUSU_STATUS, data.xiaoxiTousuStatus)
+        SpUtil.putInteger(this, AppConstant.USER_KEFU_STATUS, data.userKefuStatus)
+        SpUtil.putString(this, AppConstant.USER_KEFU_PHONE, data.userKefuPhone)
     }
 }
 

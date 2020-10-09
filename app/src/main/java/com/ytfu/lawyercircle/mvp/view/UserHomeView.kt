@@ -1,6 +1,7 @@
 package com.ytfu.lawyercircle.mvp.view
 
 import com.core.ui.mvp.BasicMVPView
+import com.ytfu.lawyercircle.ui.updatapk.StatusBean
 import com.ytfu.lawyercircle.ui.updatapk.UpDateApkBean
 
 interface UserHomeView : BasicMVPView {
@@ -13,5 +14,5 @@ interface UserHomeView : BasicMVPView {
     /**检测更新网络回调*/
     fun onCheckUpdate(data: UpDateApkBean) {}
 
-
+    fun onStatusSuccess(data: StatusBean) {}
 }

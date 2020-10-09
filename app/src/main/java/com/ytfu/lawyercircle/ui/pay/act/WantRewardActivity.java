@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.lee.annotation.InjectLayout;
 import com.github.lee.annotation.InjectPresenter;
+import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 import com.ytfu.lawyercircle.R;
 import com.ytfu.lawyercircle.app.AppConstant;
 import com.ytfu.lawyercircle.base.BaseActivity;
@@ -23,6 +25,7 @@ import com.ytfu.lawyercircle.ui.pay.bean.AccountInfoBean;
 import com.ytfu.lawyercircle.ui.pay.p.PayPresenter;
 import com.ytfu.lawyercircle.ui.pay.v.PayView;
 import com.ytfu.lawyercircle.utils.CommonUtil;
+import com.ytfu.lawyercircle.utils.LoginHelper;
 import com.ytfu.lawyercircle.utils.MessageEvent;
 import com.ytfu.lawyercircle.utils.SpUtil;
 import com.ytfu.lawyercircle.utils.dialog.DialogHelper;
@@ -32,7 +35,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import qiu.niorgai.StatusBarCompat;
@@ -52,11 +59,14 @@ public class WantRewardActivity extends BaseActivity<PayView, PayPresenter> impl
 
     private static final String KEY_ADVISORY_ID = "ADVISORY_ID";
     private static final String KEY_PAY_TYPE = "PAY_TYPE";
+    private static final String KEY_JUMP_TYPE = "JUMP_TYPE"; // 1为我要悬赏  2追加悬赏
+    private EditText et_advisory_money;
 
-    public static void start(Context context, String advisoryId, int type) {
+    public static void start(Context context, String advisoryId, int type, int jumpType) {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_ADVISORY_ID, advisoryId);
         bundle.putInt(KEY_PAY_TYPE, type);
+        bundle.putInt(KEY_JUMP_TYPE, jumpType);
         Intent starter = new Intent(context, WantRewardActivity.class);
         starter.putExtras(bundle);
         context.startActivity(starter);
@@ -222,7 +232,7 @@ public class WantRewardActivity extends BaseActivity<PayView, PayPresenter> impl
         List<Integer> reward6 = PayPresenter.getReward6();
         adapter.setNewInstance(reward6);
         adapter.setSelected(reward6.get(0));
-        EditText et_advisory_money = findViewById(R.id.et_advisory_money);
+        et_advisory_money = findViewById(R.id.et_advisory_money);
         et_advisory_money.setText(String.valueOf(reward6.get(0)));
     }
 
@@ -232,6 +242,7 @@ public class WantRewardActivity extends BaseActivity<PayView, PayPresenter> impl
         if (what == AppConstant.WX_PAY_SUCCESS) {
             // 更新支付成功UI显示
             //            MineConsultationListActivity.start(mContext);
+            uMengPoint();
             showCenterToast("支付成功");
             finish();
         }
@@ -248,6 +259,7 @@ public class WantRewardActivity extends BaseActivity<PayView, PayPresenter> impl
                             @Override
                             public void onSuccess() {
                                 showCenterToast("支付成功");
+                                uMengPoint();
                                 finish();
                             }
 
@@ -268,7 +280,38 @@ public class WantRewardActivity extends BaseActivity<PayView, PayPresenter> impl
     @Override
     public void onPayByAccountSuccess() {
         showCenterToast("支付成功");
+        uMengPoint();
         finish();
+    }
+    // ===Desc:友盟统计=================================================================
+    private void uMengPoint() {
+        String loginUserId = LoginHelper.getInstance().getLoginUserId();
+        String price = et_advisory_money.getText().toString().trim();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String format = sdf.format(new Date());
+        String orderid = format + loginUserId;
+        int jumpType = getBundleInt(KEY_JUMP_TYPE, -1);
+        String depict = "";
+        if (jumpType == 1) {
+            depict = "我要悬赏";
+        } else {
+            depict = "追加悬赏";
+        }
+        double money;
+        try {
+            money = Double.parseDouble(price);
+        } catch (NumberFormatException e) {
+            Logger.e("umengBuriedPoint" + "----------" + e);
+            e.printStackTrace();
+            return;
+        }
+        Map successPayMap = new HashMap();
+        //        HashMap<String,Object> map = new HashMap<>();
+        successPayMap.put("userid", loginUserId);
+        successPayMap.put("orderid", orderid);
+        successPayMap.put("item", depict);
+        successPayMap.put("amount", money);
+        MobclickAgent.onEvent(this, "__finish_payment", successPayMap);
     }
 
     @Override

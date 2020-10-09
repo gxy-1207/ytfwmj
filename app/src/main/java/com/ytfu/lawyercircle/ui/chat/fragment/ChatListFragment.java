@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -53,6 +54,7 @@ import com.ytfu.lawyercircle.ui.mseeage.bean.ConversationBean;
 import com.ytfu.lawyercircle.ui.mseeage.bean.HistoryRecordResponseBean;
 import com.ytfu.lawyercircle.ui.pay.PayHelper;
 import com.ytfu.lawyercircle.ui.pay.bean.AccountPayResponseBean;
+import com.ytfu.lawyercircle.ui.users.act.FeedbackActivity;
 import com.ytfu.lawyercircle.utils.LoginHelper;
 import com.ytfu.lawyercircle.utils.MessageEvent;
 import com.ytfu.lawyercircle.utils.RecyclerViewItemDecoration;
@@ -94,6 +96,7 @@ public class ChatListFragment extends BaseFragment<IChatListView, ChatListPresen
     private Handler mHandler = new Handler();
 
     private View selectAllView;
+    private LinearLayout ll_feedback;
 
     public static ChatListFragment newInstance() {
         return new ChatListFragment();
@@ -202,6 +205,8 @@ public class ChatListFragment extends BaseFragment<IChatListView, ChatListPresen
                                 .deleteConversation(
                                         LoginHelper.getInstance().getLoginUserId(), ids);
                     });
+            // 投诉
+            ll_feedback.setOnClickListener(view -> FeedbackActivity.start(getContext(), 1));
         }
     }
 
@@ -212,7 +217,7 @@ public class ChatListFragment extends BaseFragment<IChatListView, ChatListPresen
         rv_message_un_lock = rootView.findViewById(R.id.rv_message_un_lock);
         srl_message_refresh = rootView.findViewById(R.id.srl_message_refresh);
         srl_message_unlock = rootView.findViewById(R.id.srl_message_unlock);
-
+        ll_feedback = rootView.findViewById(R.id.ll_feedback);
         String type = SpUtil.getString(mContext, AppConstant.SHENFEN, "1");
         if (type.equals("2")) {
             rootView.findViewById(R.id.tl_title_toolbar)
@@ -221,6 +226,14 @@ public class ChatListFragment extends BaseFragment<IChatListView, ChatListPresen
         } else {
             rootView.findViewById(R.id.tl_title_toolbar).setBackgroundColor(Color.WHITE);
             setToolbarTextColor(R.id.tv_toolbar_title, Color.parseColor("#434343"));
+        }
+
+        int tousuStatus = SpUtil.getInteger(mContext, AppConstant.XIAOXI_TOUSU_STATUS, -1);
+        // tousuStatus   1显示  2 隐藏
+        if (tousuStatus == 1) {
+            ll_feedback.setVisibility(View.VISIBLE);
+        } else {
+            ll_feedback.setVisibility(View.GONE);
         }
     }
 
